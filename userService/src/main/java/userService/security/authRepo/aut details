@@ -1,0 +1,143 @@
+/*
+1. RegisteredClient
+*/
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+
+RegisteredClient registeredClient = RegisteredClient.withId("client-id")
+        .clientId("my-client")
+        .clientSecret("my-secret")
+        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+        .redirectUri("http://localhost:8080/callback")
+        .build();
+
+/*
+The RegisteredClient stores client details such as the ID, secret, redirect URI, and grant types.
+*/
+
+/*
+2. RegisteredClientRepository
+*/
+import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
+
+RegisteredClientRepository clientRepository = new InMemoryRegisteredClientRepository(registeredClient);
+/*
+This manages RegisteredClient instances, enabling client details to be retrieved during authentication.
+*/
+
+/*
+3. AuthorizationServerSettings
+*/
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+
+AuthorizationServerSettings settings = AuthorizationServerSettings.builder()
+        .tokenEndpoint("/oauth/token")
+        .build();
+/*
+AuthorizationServerSettings configures the endpoints for token operations such as token generation.
+*/
+
+/*
+4. OAuth2TokenCustomizer
+*/
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
+
+public class CustomTokenCustomizer implements OAuth2TokenCustomizer<JwtEncodingContext> {
+    @Override
+    public void customize(JwtEncodingContext context) {
+        context.getClaims().claim("custom-claim", "custom-value");
+    }
+}
+/*
+CustomTokenCustomizer adds custom claims to tokens such as user-specific metadata.
+*/
+
+/*
+5. JwtEncoder
+*/
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
+import org.springframework.security.oauth2.jose.jws.JwsHeader;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import java.time.Instant;
+
+JwtClaimsSet claims = JwtClaimsSet.builder()
+        .issuer("http://localhost")
+        .subject("user-id")
+        .issuedAt(Instant.now())
+        .expiresAt(Instant.now().plusSeconds(3600))
+        .build();
+
+JwtEncoder jwtEncoder = new NimbusJwtEncoder(jwkSource);
+Jwt jwt = jwtEncoder.encode(JwsHeader.with(SignatureAlgorithm.RS256).build(), claims);
+/*
+JwtEncoder generates a signed token based on claims and headers.
+*/
+
+/*
+6. JwtDecoder
+*/
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+
+JwtDecoder jwtDecoder = NimbusJwtDecoder.withPublicKey(publicKey).build();
+Jwt decodedJwt = jwtDecoder.decode("your-jwt-token");
+System.out.println(decodedJwt.getClaims());
+/*
+JwtDecoder validates the token signature and extracts claims for further use.
+*/
+
+/*
+7. AuthorizationServerConfigurer
+*/
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+
+@EnableWebSecurity
+public class AuthorizationServerConfigurer {
+    public void configure(HttpSecurity http) throws Exception {
+        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+        http.authorizeRequests().anyRequest().authenticated();
+    }
+}
+/*
+AuthorizationServerConfigurer sets up default OAuth2 authorization server endpoints and security.
+*/
+
+/*
+8. AuthorizationGrantType
+*/
+/*
+AuthorizationGrantType is used while defining the RegisteredClient. Examples:
+- AUTHORIZATION_CODE: Standard user login flow.
+- REFRESH_TOKEN: Getting a new token without logging in again.
+*/
+
+/*
+9. OAuth2AccessToken
+*/
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
+
+OAuth2AccessToken accessToken = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, "access-token-value", Instant.now(), Instant.now().plusSeconds(3600));
+/*
+OAuth2AccessToken represents the token used to access secure resources.
+*/
+
+/*
+10. OAuth2RefreshToken
+*/
+import org.springframework.security.oauth2.core.OAuth2RefreshToken;
+
+OAuth2RefreshToken refreshToken = new OAuth2RefreshToken("refresh-token-value", Instant.now(), Instant.now().plusSeconds(7200));
+/*
+OAuth2RefreshToken allows generating a new access token without re-authentication.
+*/

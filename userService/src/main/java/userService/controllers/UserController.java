@@ -1,0 +1,126 @@
+package userService.controllers;
+
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+import userService.dtos.*;
+import userService.dtos.reponseDtos.LoginResponseDto;
+import userService.dtos.reponseDtos.OtpResponseDto;
+import userService.dtos.reponseDtos.UserResponseDto;
+import userService.services.UserService;
+
+import java.net.http.HttpClient;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api/user")
+//@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+public class UserController {
+    @Autowired
+    private UserService userService;
+
+//    @GetMapping("/")
+//    public String home() {
+//        return "OAuth2 Server is running!";
+//    }
+    @GetMapping("/error")
+    public String error() {
+        return "Error page";
+    }
+
+    @PostMapping("/createUser")
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody SignUpRequestDto dto){
+        return ResponseEntity.ok(userService.createUser(dto));
+    }
+    @GetMapping("/")
+    public ResponseEntity<List<UserResponseDto>> AllUser(){
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+    @PostMapping("/Login")
+    public ResponseEntity<LoginResponseDto> createUser(@RequestBody LoginRequestDto dto){
+        return ResponseEntity.ok(userService.login(dto.getUserEmail(), dto.getPassword()));
+    }
+    @GetMapping("/getUserById")
+    public ResponseEntity<UserResponseDto> getUser(@RequestParam long id){
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+    @DeleteMapping("/DeleteUserById/{id}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable ("id") Long Id){
+        return ResponseEntity.ok(userService.deleteUserById(Id));
+    }
+    @PutMapping("/updateUser/{id}")
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable ("id")long id, @RequestBody UpdateUserDto dto){
+        return ResponseEntity.ok(userService.updateUser(id,dto));
+    }
+
+    @GetMapping("/sendOtp/{email}")
+    public ResponseEntity<OtpResponseDto> sentOtp(@PathVariable ("email") String email){
+//       try{
+           OtpResponseDto dto= userService.sendOtp(email);
+
+           return ResponseEntity.ok(dto);
+//       }catch (Exception e){
+//           throw new RuntimeException(e.getMessage());
+//       }
+
+    }
+    @PostMapping("/resetPassword")
+    public ResponseEntity<UserResponseDto> resetPassword(@RequestBody ResetPasswordReqDto dto){
+        return ResponseEntity.ok(userService.resetPassword(dto.getEmail(),dto.getOtp(),dto.getPassword()));
+    }
+
+    @GetMapping("/debug")
+    public ResponseEntity<String> debugAdminRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated() ||
+                authentication instanceof AnonymousAuthenticationToken) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is not authenticated or is anonymous");
+        }
+
+        // Retrieve roles from authentication
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        String roles = authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(", "));
+
+        String username = authentication.getName();
+        String authType = authentication.getClass().getSimpleName();
+
+        return ResponseEntity.ok(
+                "User: " + username + "\n" +
+                        "Authentication Type: " + authType + "\n" +
+                        "User roles: " + roles
+        );
+    }
+    @GetMapping("/session-info")
+    public ResponseEntity<Map<String, Object>> getSessionInfo(HttpSession session) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Map<String, Object> sessionInfo = new HashMap<>();
+        sessionInfo.put("sessionId", session.getId());
+        sessionInfo.put("sessionCreationTime", new Date(session.getCreationTime()));
+        sessionInfo.put("lastAccessedTime", new Date(session.getLastAccessedTime()));
+        sessionInfo.put("maxInactiveInterval", session.getMaxInactiveInterval());
+
+        if (authentication != null) {
+            sessionInfo.put("authenticated", authentication.isAuthenticated());
+            sessionInfo.put("username", authentication.getName());
+            sessionInfo.put("authorities", authentication.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList()));
+            sessionInfo.put("authenticationClass", authentication.getClass().getSimpleName());
+        } else {
+            sessionInfo.put("authenticated", false);
+        }
+
+        return ResponseEntity.ok(sessionInfo);
+    }
+}

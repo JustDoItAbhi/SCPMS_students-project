@@ -1,0 +1,123 @@
+import { useEffect, useState } from "react";
+import { CreateUser } from "../apis";
+import { Button, Form, Input, message } from "antd";
+import { useNavigate } from "react-router-dom";
+
+function CreatingUsers() {
+    const [user, setUser] = useState(null);
+     const [basicForm] = Form.useForm();
+
+const navigate=useNavigate();
+    const signup = async (values) => {
+        try {
+            // Add rolesList as an array if it's provided as string
+            const userData = {
+                ...values,
+                rolesList: values.rolesList ? [values.rolesList] : ["USER"] // Convert to array
+            };
+            
+            const signupUser = await CreateUser(userData);
+            console.log("sign up ", signupUser.data);
+            setUser(signupUser);
+            message.success("User created successfully!");
+            if(message.success){
+                navigate("/Login")
+            }
+            form.resetFields(); // Clear form after success
+        } catch (err) {
+            console.log(err.message);
+            message.error("Failed to create user");
+        }
+    }
+
+    return (
+        <>
+            <Form
+                form={basicForm} // FIXED: Use form instance, not user state
+                name="basic"
+                onFinish={signup}
+                layout="vertical"
+                style={{ maxWidth: 400, margin: '0 auto', padding: '20px' }}
+            >
+                <Form.Item
+                    label="Name"
+                    name="name"
+                    rules={[{ required: true, message: "Please enter your name" }]}
+                >
+                    <Input type="text" placeholder="Enter your name" />
+                </Form.Item>
+
+                <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[
+                        { required: true, message: "Please enter your email" },
+                        { type: 'email', message: 'Please enter a valid email' }
+                    ]}
+                >
+                    <Input type="email" placeholder="Enter your email" />
+                </Form.Item>
+
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[{ required: true, message: "Please enter your password" }]}
+                >
+                    <Input.Password placeholder="Enter your password" />
+                </Form.Item>
+
+                <Form.Item
+                    label="Address"
+                    name="address"
+                    rules={[{ required: true, message: "Please enter your address" }]}
+                >
+                    <Input type="text" placeholder="Enter your address" />
+                </Form.Item>
+
+                <Form.Item
+                    label="Role"
+                    name="rolesList"
+                    initialValue="USER" // Set default value
+                >
+                    <Input type="text" placeholder="Enter role (default: USER)" />
+                </Form.Item>
+
+                <Form.Item>
+                    <Button 
+                        type="primary" 
+                        htmlType="submit" 
+                        style={{ 
+                            background: '#1890ff', 
+                            color: 'white', 
+                            border: 'none', 
+                            padding: '8px 16px', 
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            width: '100%'
+                        }}
+                    >
+                        Sign up
+                    </Button>                    
+                </Form.Item>
+            </Form>
+            {
+                user && (
+                    <div style={{ 
+                        marginTop: 20, 
+                        padding: 10, 
+                        background: '#f0f0f0',
+                        maxWidth: 400,
+                        margin: '20px auto'
+                    }}>
+                        <h3>User created Successfully</h3>
+                        <p>Name: {user.name}</p>
+                        <p>Email: {user.email}</p>
+                        <p>Address: {user.address}</p>
+                        <p>Roles: {user.rolesList?.join(', ')}</p>
+                    </div>
+                )
+            }
+        </>
+    )
+}
+export default CreatingUsers;
