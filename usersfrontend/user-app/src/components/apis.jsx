@@ -58,9 +58,9 @@ export const GetUserById=async(id)=>{
         console.log(err.message);
     }
 }
- export const ResetPass=async(value)=>{
+ export const ResetPass=async(email,otp,pass)=>{
     try{
-        const response=await axiosInstance.post(`${BASE_URL}/resetPassword`,value);
+        const response=await axiosInstance.post(`${BASE_URL}/resetPassword`,{email:email,otp:otp,password:pass});
         console.log(" RESET BY ",response.data)
         return response.data
     }catch(err){

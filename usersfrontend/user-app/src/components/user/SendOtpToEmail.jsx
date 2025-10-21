@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ResetPass, SendOTP } from "../apis";
-import {useNavigate, userNavigate} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 
 function SendOtpToEmail(){
 const navigate=  useNavigate();

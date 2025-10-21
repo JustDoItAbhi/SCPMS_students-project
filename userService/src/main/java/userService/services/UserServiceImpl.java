@@ -16,6 +16,7 @@ import userService.dtos.reponseDtos.UserResponseDto;
 import userService.entitis.Roles;
 import userService.entitis.Users;
 import userService.exceptions.UserExceptions;
+import userService.java_email.EmailService;
 import userService.rpos.RolesRepository;
 import userService.rpos.UserRepository;
 
@@ -33,6 +34,9 @@ public class UserServiceImpl implements UserService{
     private RolesRepository rolesRepository;
     @Autowired
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private EmailService emailService;
+
     @Override
     public UserResponseDto createUser(SignUpRequestDto dto) {
         Optional<Users>exsitingUser=userRepository.findByEmail(dto.getEmail());
@@ -159,7 +163,7 @@ public class UserServiceImpl implements UserService{
 
 
         LocalDateTime generatedTime = LocalDateTime.now();
-        LocalDateTime expiryTime = generatedTime.plusMinutes(1);
+        LocalDateTime expiryTime = generatedTime.plusMinutes(5);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
         String generatedTimeReadable = generatedTime.format(formatter);
         String expiryTimeReadable = expiryTime.format(formatter);
@@ -174,6 +178,8 @@ public class UserServiceImpl implements UserService{
         if(generatedTime.isAfter(expiryTime)){
             throw new UserExceptions("OTP expired");
         }
+        emailService.sendSimpleEmail(users.getEmail(),"YOUR OTP IS "+ otp, "THANK YOUR");
+        System.out.println("email sent");
         return dto;
     }
 
@@ -196,6 +202,7 @@ public class UserServiceImpl implements UserService{
         }
         users.setPassword(passwordEncoder.encode(password));
         userRepository.save(users);
+        System.out.println("PASSWORD RESET SUCCESSFULLY_________________________________");
         return UserMapper.fromUserEntity(users);
     }
 

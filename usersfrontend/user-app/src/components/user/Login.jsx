@@ -18,7 +18,7 @@ function Login() {
         // Store user data in state/localStorage/context as needed
         localStorage.setItem("user", JSON.stringify(userData));
         console.log("login successfully ")
-        navigate("/ID");
+        navigate("/GetById");
       }
     } catch (err) {
       console.log(err.message);
@@ -62,6 +62,10 @@ function Login() {
         <Form.Item label={null}>
           <Button type="primary" htmlType="submit" loading={loading}>
             Submit
+          </Button>
+          <hr/>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            Reset Password
           </Button>
         </Form.Item>
       </Form>
