@@ -52,7 +52,7 @@ const Callback = () => {
 
     if (error) {
       console.error('OAuth error:', error);
-      navigate("/login");
+      // navigate("/login");
       return;
     }
 

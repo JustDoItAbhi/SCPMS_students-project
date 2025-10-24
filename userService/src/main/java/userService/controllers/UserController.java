@@ -13,6 +13,7 @@ import userService.dtos.*;
 import userService.dtos.reponseDtos.LoginResponseDto;
 import userService.dtos.reponseDtos.OtpResponseDto;
 import userService.dtos.reponseDtos.UserResponseDto;
+import userService.security.authRepo.customization.CustomUsersDetals;
 import userService.services.UserService;
 
 import java.net.http.HttpClient;
@@ -25,6 +26,23 @@ import java.util.stream.Collectors;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUserDetails(Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated() &&
+                authentication.getPrincipal() instanceof CustomUsersDetals userDetails) {
+
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("id", userDetails.getUserId());
+            userInfo.put("username", userDetails.getUsername());
+            userInfo.put("email", userDetails.getUserEmail());
+            userInfo.put("authorities", userDetails.getAuthorities());
+            userInfo.put("authenticated", true);
+
+            return ResponseEntity.ok(userInfo);
+        }
+        return ResponseEntity.status(401).body("{\"authenticated\": false}");
+    }
 
 //    @GetMapping("/")
 //    public String home() {

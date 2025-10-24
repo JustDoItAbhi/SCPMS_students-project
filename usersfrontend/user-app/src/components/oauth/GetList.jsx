@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../auth/AuthMiddleWear";
 
 const GetList = () => {
+      console.log("GET BY ID ")
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
@@ -14,8 +16,8 @@ const GetList = () => {
       return;
     }
 
-    axios
-      .get("http://localhost:8080/api/user/", {
+    axiosInstance
+      .get("/api/user/", {
         headers: {
           Authorization: `Bearer ${token}`,
         }

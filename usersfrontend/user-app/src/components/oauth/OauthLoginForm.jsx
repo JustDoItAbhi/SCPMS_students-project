@@ -2,7 +2,7 @@ import React from 'react';
 
 const OauthLoginForm = () => {
 
-    console.log("4TH REQUEST")
+    console.log("4TH REQUEST OAUTH LOGIN FORM")
   return (
     <div style={{ textAlign: 'center', marginTop: '100px' }}>
       <h2>Login with OAuth2</h2>
