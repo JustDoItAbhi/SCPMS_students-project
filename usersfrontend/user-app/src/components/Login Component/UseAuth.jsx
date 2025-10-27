@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext, useContext } from 'react';
 import axios from 'axios';
+import decodeJWT from "../apps/decodeJWT"
 
 const AuthContext = createContext();
 
@@ -18,13 +19,12 @@ export const AuthProvider = ({ children }) => {
     const checkAuthStatus = async () => {
         try {
             const token = localStorage.getItem('access_token');
-            if (token) {
+            const userData = localStorage.getItem('user');
+            
+            if (token && userData) {
                 // Set the authorization header
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                
-                // Verify token by calling user endpoint
-                const response = await axios.get('http://localhost:8080/api/user/me');
-                setUser(response.data);
+                setUser(JSON.parse(userData));
             } else {
                 setUser(null);
             }
@@ -39,33 +39,54 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const login = async (email, password) => {
-        try {
-            const formData = new URLSearchParams();
-            formData.append('email', email);
-            formData.append('password', password);
+const login = async (email, password) => {
+    console.log("AUTH LOGIN PAGE ")
+    try {
+        const formData = new URLSearchParams();
+        formData.append('email', email);
+        formData.append('password', password);
 
-            const response = await axios.post('http://localhost:8080/api/auth/login', formData, {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                withCredentials: true
-            });
+        const response = await axios.post('http://localhost:8080/api/auth/login', formData, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            withCredentials: true
+        });
+        
+        console.log("AUTH RESPONSE ", response.data);
+        const { token, user: userData } = response.data;
+        
+        localStorage.setItem('access_token', token);
+        console.log("Token stored in localStorage:", token ? "Yes" : "No");
+        
+        // Decode the token to get the roles
+        const decodedToken = decodeJWT(token);
+        console.log("Decoded token:", decodedToken);
+           const fullEmail = decodedToken.email || "";
+           const username = fullEmail.split('@')[0] || "User";
+        console.log("Extracted username:", username);
 
-            const { token, user: userData } = response.data;
-            
-            // Store token and update user state
-            localStorage.setItem('access_token', token);
-            localStorage.setItem('user', JSON.stringify(userData));
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            setUser(userData); 
-            
-            return response.data;
-            
-        } catch (error) {
-            throw error;
-        }
-    };
+        const completeUserData = {
+            ...userData,
+             username: username,
+            roles: decodedToken.roles || [],
+            grantAuthority: decodedToken.roles?.[0] || 'USER'
+        };
+        
+        console.log("Complete user data to store:", completeUserData);
+        
+        // Store user data
+        localStorage.setItem('user', JSON.stringify(completeUserData));
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        setUser(completeUserData);
+        
+        return response.data;
+        
+    } catch (error) {
+        console.log("Login error:", error);
+        throw error;
+    }
+};
 
     const logout = async () => {
         try {
@@ -78,7 +99,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.removeItem('access_token');
             localStorage.removeItem('user');
             delete axios.defaults.headers.common['Authorization'];
-            setUser(null); // ← Clear user state
+            setUser(null);
             window.location.href = '/login';
         }
     };

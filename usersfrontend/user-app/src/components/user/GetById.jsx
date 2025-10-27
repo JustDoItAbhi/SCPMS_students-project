@@ -2,59 +2,60 @@ import { useEffect, useState } from "react";
 import { GetUserById } from "../apis";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import { useAuth } from "../Login Component/UseAuth";
+import  decodeJWT  from "../apps/decodeJWT";
 
 function GetById() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
-  const[id,setId]=useState("");
-    // const { id } = useParams();
-  // const id = useSearchParams.get('id');
-  //  const id = location.state?.id;
+  const [searchPharm] = useSearchParams();
+  const { id } = useParams();
 
-//  const { user: currentUser } = useAuth();
-  
-//   useEffect(() => {
-//     const handleCurrentUser = async () => {
-//       try {
-//         // Call endpoint that returns current user without needing ID
-//         const response = await axios.get('/api/user/me', {
-//           headers: {
-//             Authorization: `Bearer ${localStorage.getItem('access_token')}`
-//           }
-//         });
-//         console.log("Current User:", response.data);
-//         setUser(response.data);
-//       } catch (err) {
-//         console.log("Error:", err.message);
-//         setError("Failed to fetch user data");
-//       }
-//     };
 
-//     handleCurrentUser();
-//   }, []);
 
 
   useEffect(() => {
-    const handleUserById = async (Id) => {
+    const handleUserById = async () => {
       try {
-        const response = await GetUserById(Id);
-        console.log("USER:", response);
-        setId(response.id);
-        setUser(response);
+          // const token = localStorage.getItem("access_token");
+          
+          // if (token) {
+          //   const decodedToken=decodeJWT(token);
+          //   if(decodedToken){
+          //     const userFromStorage={
+          //       id:decodedToken.id,
+          //       email:decodedToken.email,
+          //       roles: decodedToken.roles || [],
+          //                   grantAuthority: decodedToken.roles?.[0] || 'USER',
+          //     name: decodedToken.sub || decodedToken.email, // Use sub as name or email
+          //     // Add other fields as needed
+          //   };
+          //   console.log("USER FROM TOKEN:", userFromStorage);
+          //   setUser(userFromStorage);
+          //   return;
+          //   }
+
+          // }
+
+        // Fallback to localStorage user data
+        const userFromStorage = localStorage.getItem("user");
+        if (userFromStorage) {
+          const parsedUser = JSON.parse(userFromStorage);
+          console.log("USER FROM LOCALSTORAGE:", parsedUser);
+          setUser(parsedUser);
+        } else {
+          setError("User not found");
+        }
       } catch (err) {
         console.log("Error:", err.message);
-        setError("User not found or failed to fetch data");
+        setError("Failed to fetch user data");
       }
     };
-
-      handleUserById(1);
- 
-   
-  }, []);
+    handleUserById();
+  }, [id]);
 
   return (
     <>
-      <h1 style={{ textAlign: "center" }}>WELCOME</h1>
+      <h1 style={{ textAlign: "center" }}>Welcome</h1>
 
       {error && (
         <p style={{ color: "red", textAlign: "center", marginTop: 10 }}>
@@ -73,16 +74,20 @@ function GetById() {
             borderRadius: "8px",
           }}
         >
-          <h2>{user.name}</h2>
+          <h2>User ID: {user.id}</h2>
           <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Address:</strong> {user.address}</p>
-          <p>
-            <strong>Roles:</strong> {user.rolesList?.join(", ") || "No roles"}
-          </p>
+          <p><strong>Authority:</strong> {user.grantAuthority}</p>
+          <p><strong>Subject:</strong> {user.sub}</p>
+          {user.username && <p><strong>Name:</strong> {user.username}</p>}
+          {user.address && <p><strong>Address:</strong> {user.address}</p>}
+          {user.rolesList && (
+            <p>
+              <strong>Roles:</strong> {user.rolesList.join(", ")}
+            </p>
+          )}
         </div>
       )}
     </>
   );
 }
-
 export default GetById;

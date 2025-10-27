@@ -1,10 +1,7 @@
 package userService.dtos;
 
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
-import userService.entitis.Roles;
 
 import java.util.List;
 @Getter

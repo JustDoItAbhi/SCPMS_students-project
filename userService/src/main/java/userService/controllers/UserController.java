@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,10 +14,9 @@ import userService.dtos.*;
 import userService.dtos.reponseDtos.LoginResponseDto;
 import userService.dtos.reponseDtos.OtpResponseDto;
 import userService.dtos.reponseDtos.UserResponseDto;
-import userService.security.authRepo.customization.CustomUsersDetals;
+import userService.security.customization.CustomUsersDetals;
 import userService.services.UserService;
 
-import java.net.http.HttpClient;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,16 +57,17 @@ public class UserController {
     public ResponseEntity<UserResponseDto> createUser(@RequestBody SignUpRequestDto dto){
         return ResponseEntity.ok(userService.createUser(dto));
     }
-    @GetMapping("/")
+    @GetMapping("/allUsers")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDto>> AllUser(){
         return ResponseEntity.ok(userService.getAllUsers());
     }
-    @PostMapping("/Login")
-    public ResponseEntity<LoginResponseDto> createUser(@RequestBody LoginRequestDto dto){
-        return ResponseEntity.ok(userService.login(dto.getUserEmail(), dto.getPassword()));
-    }
-    @GetMapping("/getUserById")
-    public ResponseEntity<UserResponseDto> getUser(@RequestParam long id){
+//    @PostMapping("/Login")
+//    public ResponseEntity<LoginResponseDto> createUser(@RequestBody LoginRequestDto dto){
+//        return ResponseEntity.ok(userService.login(dto.getUserEmail(), dto.getPassword()));
+//    }
+    @GetMapping("/getUserById/{id}")
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable ("id") long id){
         return ResponseEntity.ok(userService.getUserById(id));
     }
     @DeleteMapping("/DeleteUserById/{id}")

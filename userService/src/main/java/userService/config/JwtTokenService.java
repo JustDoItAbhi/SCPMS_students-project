@@ -8,7 +8,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
-import userService.security.authRepo.customization.CustomUsersDetals;
+import userService.security.customization.CustomUsersDetals;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.util.Date;
@@ -36,7 +36,9 @@ public class JwtTokenService {
                     .subject(userDetails.getUsername())
                     .claim("id", userDetails.getUserId())
                     .claim("email", userDetails.getUserEmail())
-                    .claim("roles", authorities)
+                    .claim("roles", userDetails.getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .collect(Collectors.toList()))
                     .issuer("user-service")
                     .issueTime(new Date())
                     .expirationTime(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))

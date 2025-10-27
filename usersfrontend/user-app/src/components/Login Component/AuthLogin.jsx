@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "./UseAuth";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; 
 import "./AuthLoginCss.css"
 
 const AuthLogin = () => {
@@ -22,40 +21,38 @@ const AuthLogin = () => {
         setError('');
     };
 
-   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
 
-    try {
-        const response = await login(formData.email, formData.password);
-        console.log("RESPONSE ", response.token);
-        
-        if (response) {
-                    console.log("RESPONSE ", response.token);
-            // Store token in localStorage
-            localStorage.setItem('access_token', response.token);
-            localStorage.setItem('user', JSON.stringify(response.user));
+        try {
+            const response = await login(formData.email, formData.password);
+            console.log("LOGIN RESPONSE ", response);
             
-            // Set default authorization header
-            axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
+            if (response && response.token) {
+                console.log("Login successful, redirecting...");
+                
+                // Get user ID from the stored user data
+                const userData = localStorage.getItem('user');
+                if (userData) {
+                    const user = JSON.parse(userData);
+                    navigate(`/GetById/${user.id}`);
+                } else {
+                    // Fallback navigation
+                    navigate('/profile');
+                }
+            } else {
+                setError('Login successful but no token received');
+            }
             
-            // Manually update auth context if needed
-            // This depends on your UseAuth implementation
-            // await checkAuthStatus(); // If you export this from UseAuth
-            
-            console.log("Login successful, redirecting...");
-            navigate('/GetById');
-        } else {
-            setError('Login successful but no token received');
+        } catch (err) {
+            console.error("Login error:", err);
+            setError(err.response?.data?.error || err.message || 'Login failed');
+        } finally {
+            setLoading(false);
         }
-        
-    } catch (err) {
-        setError(err.response?.data?.error || 'Login failed');
-    } finally {
-        setLoading(false);
-    }
-};
+    };
 
     return (
         <div className="login-container">

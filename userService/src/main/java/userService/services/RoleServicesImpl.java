@@ -3,8 +3,8 @@ package userService.services;
 import org.springframework.stereotype.Service;
 import userService.dtos.RolesRequestDto;
 import userService.dtos.reponseDtos.RoleResponseDto;
-import userService.entitis.Roles;
-import userService.rpos.RolesRepository;
+import userService.entities.Roles;
+import userService.repos.RolesRepository;
 
 import java.util.Optional;
 

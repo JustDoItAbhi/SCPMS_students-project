@@ -10,12 +10,15 @@ import NavBar from '../user/NavBar';
 import GetById from "../user/GetById";
 import ResetPassword from '../user/ResetPassword';
 import SendOtpToEmail from '../user/SendOtpToEmail';
-import ProtectedRoute from '../Login Component/ProtectedRoute'; 
+import ProtectedRoute from '../Login Component/ProtectedRoute';
 import AuthLogin from '../Login Component/AuthLogin';
+import ROLE from '../constrains/Roles';
+import Unauthorized from '../Login Component/Unauthorized';
 
 function AppContent() {
   const location = useLocation();
-  const showNavBar = ['/USER', '/create', '/GetList', '/GetById', '/SENDOTP', '/dashboard'].includes(location.pathname);
+  const showNavBar = ['/USER', '/create', '/GetList', '/SENDOTP', '/dashboard', '/unauthorized'].includes(location.pathname)
+    || location.pathname.startsWith('/GetById/');
 
   return (
     <>
@@ -33,17 +36,38 @@ function AppContent() {
         <Route path="/callback" element={<Callback />} />
         <Route path="/RESETPASSWORD" element={<ResetPassword />} />
         <Route path="/SENDOTP" element={<SendOtpToEmail />} />
-        <Route path="/GetById" element={<GetById />} />
+        <Route path="/GetById/:id" element={<GetById />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/create" element={<CreatingUsers />} />
+        {/* <Route path="/USER" element={<Users />} /> */}
+        <Route
+          path="/GetList"
+          element={
+            <ProtectedRoute>
+              <GetList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/USER"
+          element={
+            <ProtectedRoute requiredRole={ROLE.ADMIN}>
+              <Users />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Protected routes */}
-        <Route path="/USER" element={<ProtectedRoute><Users /></ProtectedRoute>} />
-        <Route path="/create" element={<ProtectedRoute><CreatingUsers /></ProtectedRoute>} />
-        <Route path="/GetList" element={<ProtectedRoute><GetList /></ProtectedRoute>} />
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-       {/* <Route path="/GetById/:id" element={<ProtectedRoute><GetById /></ProtectedRoute>} /> */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
-  )
+  );
 }
 
 export default AppContent;

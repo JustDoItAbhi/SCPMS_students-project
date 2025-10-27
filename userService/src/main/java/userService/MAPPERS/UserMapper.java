@@ -1,9 +1,9 @@
-package userService.MAPPERS;
+package userService.mappers;
 
 import userService.dtos.reponseDtos.RoleResponseDto;
 import userService.dtos.reponseDtos.UserResponseDto;
-import userService.entitis.Roles;
-import userService.entitis.Users;
+import userService.entities.Roles;
+import userService.entities.Users;
 
 import java.util.ArrayList;
 import java.util.List;

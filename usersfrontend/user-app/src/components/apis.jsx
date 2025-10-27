@@ -2,13 +2,21 @@ import axios from "axios"
 import axiosInstance from "../auth/AuthMiddleWear"
 const BASE_URL="http://localhost:8080/api/user"
 
-export const GetAllUsers=async()=>{
-    try{
-        const users=await axiosInstance.get(`${BASE_URL}/`)
-        console.log("ALL USERS ",users.data)
-        return users.data
-    }catch(err){
-        console.log(err.message);
+export const GetAllUsers = async () => {
+    try {
+        console.log("🔍 Making GetAllUsers API call...");
+        const response = await axiosInstance.get("/api/user/");
+        console.log("✅ GetAllUsers success:", response.data);
+        return response.data;
+    } catch (err) {
+        console.log("❌ GetAllUsers error details:", {
+            message: err.message,
+            status: err.response?.status,
+            statusText: err.response?.statusText,
+            data: err.response?.data,
+            headers: err.response?.headers
+        });
+        throw err;
     }
 }
 export const CreateUser=async(values)=>{
@@ -41,9 +49,9 @@ export const DeleteUser=async(value)=>{
 
 export const GetUserById=async(id)=>{
     try{
-        const response=await axiosInstance.get(`${BASE_URL}/getUserById`,{params: { id: id }});
-        console.log(" USERS BY ID",response.data)
-        return response.data
+        const response=await axiosInstance.get(`${BASE_URL}/getUserById/${id}`);
+        console.log(" USERS BY ID",response)
+        return response
     }catch(err){
         console.log(err.message);
     }

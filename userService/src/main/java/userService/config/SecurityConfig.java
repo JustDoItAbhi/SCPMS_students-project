@@ -18,7 +18,6 @@ import com.nimbusds.jose.proc.SecurityContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -51,7 +50,7 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import userService.security.authRepo.customization.CustomUsersDetals;
+import userService.security.customization.CustomUsersDetals;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -134,7 +133,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(
-                                "/",
+
                                 "/login",
                                 "/api/auth/**",
                                 "/oauth2/**",
@@ -142,7 +141,7 @@ public class SecurityConfig {
                                 "/client/register",
                                 "/api/user/createUser"
                         ).permitAll()
-                        .requestMatchers("/api/user/debug").hasRole("ADMIN")
+                        .requestMatchers("/api/user/").permitAll()
                         .requestMatchers("/api/user/session-info").authenticated()
                         .anyRequest().authenticated()
                 )

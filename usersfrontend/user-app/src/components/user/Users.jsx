@@ -1,64 +1,140 @@
 import { useEffect, useState } from "react";
 import { GetAllUsers } from "../apis";
+import { useAuth } from "../Login Component/UseAuth";
+import { Navigate } from "react-router-dom";
+import axios from "axios";
+import axiosInstance from "../../auth/AuthMiddleWear";
 
 function Users() {
   const [getUsers, setUsers] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [error, setError] = useState(null);
+  const { user, loading: authLoading } = useAuth();
 
   const getData = async () => {
     try {
-      const user = await GetAllUsers();
-      console.log("ALL USERS FROM USERS", user);
-      setUsers(user);
+      setError(null);
+      setLoadingUsers(true);
+      
+      const token = localStorage.getItem('access_token');
+      console.log("=== BEFORE API CALL ===");
+      console.log("Token in localStorage:", token);
+      console.log("User from auth:", user);
+      
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+      const users=await axiosInstance.get(`/api/user/allUsers`)
+
+      console.log("API Response data:", users.data);
+      setUsers(users.data);
+      // if (Array.isArray(users)) {
+      //   setUsers(users);
+      // } else {
+      //   console.log("Unexpected response format:", users);
+      //   setUsers([]);
+      // }
+      
     } catch (err) {
-      console.log(err.message);
+      console.log("Error in getData:", err);
+      setError(err.message || "Failed to fetch users");
+    } finally {
+      setLoadingUsers(false);
     }
   };
 
   useEffect(() => {
-    getData();
-  }, []);
+      getData();
+  }, [user]);
+
+  const userRole = user?.roles?.[0];
+  const isAdmin = userRole === "ADMIN";
+
+  if (authLoading) {
+    return <div>Loading authentication...</div>;
+  }
+
+  if (!user) {
+    console.log("you are not a user")
+    // return <Navigate to="/login" replace />;
+  }
+
+  if (!isAdmin) {
+    console.log("you are not admin")
+    // return <Navigate to="/unauthorized" replace />;
+  }
 
   return (
     <div style={{ position: "relative", zIndex: 10, color: "white", padding: "20px" }}>
-      <h1>USERS</h1>
-      <div
-        style={{
-          display: "flex",
-          gap: "10px",
-          flexWrap: "wrap",
-        }}
-      >
-        {getUsers.map((items, index) => (
-          <div key={index}>
-            <ul
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                width: 200,
-                height: "120px",
-                overflow: "hidden",
-                background: "rgba(128,128,128,0.5)", // semi-transparent grey
-                padding: "10px",
-                borderRadius: "8px",
-              }}
-            >
-              <li
-                style={{
-                  background: "hsla(120, 100%, 50%, 0.3)", // semi-transparent green
-                  fontSize: "18px",
-                  padding: "2px 5px",
-                  borderRadius: "4px",
-                }}
-              >
-                {items.name}
-              </li>
-              <li>{items.email}</li>
-              <li>{items.password}</li>
-              <li>{items.address}</li>
-            </ul>
-          </div>
-        ))}
+      <h1>ADMIN PANEL - ALL USERS</h1>
+      
+      <div style={{ 
+        background: "rgba(0,0,0,0.3)", 
+        padding: "10px", 
+        borderRadius: "4px",
+        marginBottom: "20px",
+        fontSize: "14px"
+      }}>
+        <strong>Your Details:</strong> 
+        <br />User Role: <span style={{color: "lightgreen"}}>{userRole}</span>
+        <br />Token: <span style={{color: localStorage.getItem('access_token') ? "lightgreen" : "red"}}>
+          {localStorage.getItem('access_token') ? "Present" : "Missing"}
+        </span>
+        <br />Total Number of Clients: <span style={{color: "lightblue"}}>{getUsers.length}</span>
       </div>
+      
+      {error && (
+        <div style={{ color: "red", marginBottom: "20px" }}>
+          Error: {error}
+        </div>
+      )}
+      
+      {loadingUsers ? (
+        <div>Loading users...</div>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            flexWrap: "wrap",
+          }}
+        >
+          {getUsers.length > 0 ? (
+            getUsers.map((user, index) => (
+              <div key={user.id || index}>
+                <ul
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: 220,
+                    minHeight: "140px",
+                    background: "rgba(128,128,128,0.5)",
+                    padding: "15px",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <li
+                    style={{
+                      background: "hsla(120, 100%, 50%, 0.3)",
+                      fontSize: "18px",
+                      padding: "5px 8px",
+                      borderRadius: "4px",
+                      marginBottom: "8px"
+                    }}
+                  >
+                    {user.name}
+                  </li>
+                  <li><strong>Email:</strong> {user.email}</li>
+                  <li><strong>ID:</strong> {user.id}</li>
+                  <li><strong>Address:</strong> {user.address}</li>
+                </ul>
+              </div>
+            ))
+          ) : (
+            <div>No users found</div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
