@@ -8,7 +8,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
-import userService.security.customization.CustomUsersDetals;
+import userService.security.customization.CustomUsersDetails;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.util.Date;
@@ -24,7 +24,7 @@ public class JwtTokenService {
         this.privateKey = privateKey;
     }
 
-    public String generateToken(CustomUsersDetals userDetails) {
+    public String generateToken(CustomUsersDetails userDetails) {
         try {
             JWSSigner signer = new RSASSASigner(privateKey);
 

@@ -14,6 +14,7 @@ import ProtectedRoute from '../Login Component/ProtectedRoute';
 import AuthLogin from '../Login Component/AuthLogin';
 import ROLE from '../constrains/Roles';
 import Unauthorized from '../Login Component/Unauthorized';
+import HomePage from '../home/HomePage';
 
 function AppContent() {
   const location = useLocation();
@@ -39,7 +40,7 @@ function AppContent() {
         <Route path="/GetById/:id" element={<GetById />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/create" element={<CreatingUsers />} />
-        {/* <Route path="/USER" element={<Users />} /> */}
+        <Route path="/Home" element={<HomePage />} />
         <Route
           path="/GetList"
           element={

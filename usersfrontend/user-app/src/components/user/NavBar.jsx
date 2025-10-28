@@ -38,7 +38,8 @@ function NavBar() {
             alignItems: "center",
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
         }}>
-            <Link to="/USER" style={{ color: "white", textDecoration: "none" }}>USERS</Link> 
+                 <Link to="/Home" style={{ color: "white", textDecoration: "none" }}>HOME</Link>
+            {/* <Link to="/USER" style={{ color: "white", textDecoration: "none" }}>USERS</Link>  */}
             
             {/* My Profile with click handler */}
              <span 
@@ -51,6 +52,7 @@ function NavBar() {
             >
                 MY PROFILE
             </span>
+         
              <Link to="/USER" style={{ color: "white", textDecoration: "none" }}>USERS</Link>
             <Link to="/create" style={{ color: "white", textDecoration: "none" }}>SIGN UP</Link>
             <Link to="/Login" style={{ color: "white", textDecoration: "none" }}>LOGIN</Link>

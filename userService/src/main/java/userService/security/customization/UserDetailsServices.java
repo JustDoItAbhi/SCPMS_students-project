@@ -22,6 +22,6 @@ public class UserDetailsServices implements UserDetailsService {// custome user 
         }
         Users users=savedUser.get();
         System.out.println("USERS "+users.getName());
-        return new CustomUsersDetals(users);// retrun customized user
+        return new CustomUsersDetails(users);// retrun customized user
     }
 }

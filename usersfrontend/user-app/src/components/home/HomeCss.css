@@ -1,0 +1,17 @@
+.main-container{
+    background-color: rgb(167, 180, 180);
+    margin: 0;
+    padding: 0;
+    
+}
+h1{
+    font-family: 'Courier New', Courier, monospace;
+    font-size:xx-large;
+    text-underline-offset: 8px;
+    border: solid;
+
+}
+.titles{
+    font:italic 1.2rem "Fira Sans", serif;
+    text-underline-offset: 8px;
+}

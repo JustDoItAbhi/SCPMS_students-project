@@ -1,5 +1,5 @@
 
-import './App.css'
+// import './App.css'
 import { BrowserRouter, Route, Router, Routes, useLocation } from 'react-router-dom';
 
 import AppContent from './components/apps/AppContent';

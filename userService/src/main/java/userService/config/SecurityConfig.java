@@ -50,7 +50,7 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import userService.security.customization.CustomUsersDetals;
+import userService.security.customization.CustomUsersDetails;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -141,7 +141,9 @@ public class SecurityConfig {
                                 "/client/register",
                                 "/api/user/createUser"
                         ).permitAll()
-                        .requestMatchers("/api/user/").permitAll()
+
+
+                        .requestMatchers("/api/user/createUser").permitAll()
                         .requestMatchers("/api/user/session-info").authenticated()
                         .anyRequest().authenticated()
                 )
@@ -174,7 +176,7 @@ public class SecurityConfig {
             public void onAuthenticationSuccess(HttpServletRequest request,
                                                 HttpServletResponse response,
                                                 Authentication authentication) throws IOException, ServletException {
-                CustomUsersDetals usersDetals= (CustomUsersDetals) authentication.getPrincipal();
+                CustomUsersDetails usersDetals= (CustomUsersDetails) authentication.getPrincipal();
              String JwtToken= jwtTokenService.generateToken(usersDetals);
              response.setStatus(HttpStatus.OK.value());
                 response.setContentType("application/json;charset=UTF-8");
@@ -278,7 +280,7 @@ public class SecurityConfig {
     @Bean
     public OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer() {
         return context -> {
-            if (context.getPrincipal() != null && context.getPrincipal().getPrincipal() instanceof CustomUsersDetals userDetails) {
+            if (context.getPrincipal() != null && context.getPrincipal().getPrincipal() instanceof CustomUsersDetails userDetails) {
                 List<String> roles = userDetails.getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)

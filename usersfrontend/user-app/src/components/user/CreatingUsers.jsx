@@ -13,7 +13,7 @@ const navigate=useNavigate();
             // Add rolesList as an array if it's provided as string
             const userData = {
                 ...values,
-                rolesList: values.rolesList ? [values.rolesList] : ["USER"] // Convert to array
+                 rolesList: values.rolesList ? [values.rolesList] : ['USER']
             };
             
             const signupUser = await CreateUser(userData);
@@ -23,7 +23,7 @@ const navigate=useNavigate();
             if(message.success){
                 navigate("/Login")
             }
-            form.resetFields(); // Clear form after success
+        
         } catch (err) {
             console.log(err.message);
             message.error("Failed to create user");

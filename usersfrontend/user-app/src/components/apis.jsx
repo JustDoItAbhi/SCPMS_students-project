@@ -19,13 +19,20 @@ export const GetAllUsers = async () => {
         throw err;
     }
 }
-export const CreateUser=async(values)=>{
-    try{
-        const create=await axios.post(`${BASE_URL}/createUser`,values);
-        console.log(create)
-        return create
-    }catch(err){
-        console.log(err.message);
+export const CreateUser = async (values) => {
+    try {
+        const create = await axios.post("http://localhost:8080/api/user/createUser", values, {
+            headers: {
+                Authorization: undefined, // Explicitly remove
+                'Content-Type': 'application/json'
+            },
+            withCredentials: false // Important: disable credentials
+        });
+        console.log("✅ CreateUser success:", create);
+        return create;
+    } catch (err) {
+        console.log("❌ CreateUser error:", err.message);
+        throw err;
     }
 }
 export const LoginUser=async(value)=>{
