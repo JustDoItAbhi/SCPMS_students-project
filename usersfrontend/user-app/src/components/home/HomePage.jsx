@@ -1,30 +1,86 @@
 import "./HomeCss.css"
-function HomePage(){
+import { useNavigate } from "react-router-dom"
+function HomePage() {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate("/Login")
+    }
     return (
         <div className="main-container">
-                <h1>S C P M S <br/>
-                <span className="titles">Student Conference Participation Management System</span></h1>
-                <h2>Overview</h2>
-        <p>The Student Conference Participation Management System allows students to register for an academic conference by choosing a subject and submitting a topic under that subject. Each topic must be verified and approved or rejected by a teacher.
-The system ensures secure authentication, role-based authorization, and sends email notifications at each stage (submission, approval, rejection).
-</p>
-<ul>
-    <h2>Objectives</h2>
-    <li>•	Provide a centralized portal for students to propose topics for conferences.</li>
-    <li>•	Allow teachers to efficiently verify and approve or reject proposed topics.</li>
-    <li>•	Ensure secure access control for both students and teachers.</li>
-    <li>•	Send automated email notifications to users about submission status.</li>
-    <li>•	Maintain records of approved/rejected topics for reporting and transparency.</li>
 
-</ul>
-<div>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus expedita voluptates sint? Quibusdam voluptatem at atque illum? Molestias alias eius odio velit eaque quos distinctio quo perspiciatis perferendis, debitis a?
-    Dolor omnis, officia architecto corrupti porro tempora ea atque! Officia voluptates harum placeat obcaecati, totam maiores vero voluptatibus nesciunt reiciendis cumque, fugit mollitia in laboriosam. Harum totam architecto aspernatur commodi!
-    Modi dolores totam aperiam quos deleniti officia facere voluptates pariatur? Odio, eveniet repudiandae libero, porro, iste doloribus facilis nulla vitae a fugiat voluptatibus necessitatibus ea saepe fuga? Dolor, quidem soluta!
-    Voluptas a delectus, quos fuga debitis rerum est odio neque nisi quia ullam dolore eius. Consectetur, libero voluptate vel tempora porro cumque exercitationem quas aut voluptatem, atque inventore recusandae dolorum.
-</div>
+            <div>
+                <div className="topic">
+                    <button onClick={handleClick} className="buttonMenu">
+                        MENU
+                    </button>
+                    <h1 className="scpms">
+                        <span>S </span>
+                        <span>C </span>
+                        <span>P </span>
+                        <span>M </span>
+                        <span>S </span>
+                        <br />
+                        <span className="titles">Student Conference Participation Management System </span>    </h1>
+                </div>
+
+                <h2 className="objective">Overview</h2>
+                <p>The Student Conference Participation Management System allows students to register for an academic conference by choosing a
+                    subject and submitting a topic under that subject. Each topic must be verified and approved or rejected by a teacher.
+                    The system ensures secure authentication, role-based authorization, and sends email notifications at each stage (submission, approval, rejection).
+                </p>
+
+                <video
+                    className="videointro"
+                    src="/hi.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                ></video>
+
+                <ul>
+                    <h2 className="objective">Objectives</h2>
+                    <li>Centralized Platform – Students can register, submit topics, and track their conference participation all in one place.</li>
+                    <li>Efficient Topic Approval – Teachers can easily review, approve, or reject submissions, saving time and effort.</li>
+                    <li>Secure Access Control – Role-based authentication ensures students and teachers only access relevant data.</li>
+                    <li>Automated Notifications – Students receive instant email updates for submission, approval, or rejection statuses.</li>
+                    <li>Record Keeping & Transparency – Maintains a history of approved and rejected topics for reporting and accountability.</li>
+                </ul>
+                  <video
+                    className="videointro"
+                    src="/v1.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                ></video> 
+                <br/>
+                <div>
+                    <p>
+                        Our Student Conference Participation Management System (SCPMS) makes conference participation effortless and rewarding. Students can easily submit topics, 
+                    track approvals, and receive instant notifications - all in one secure platform. Teachers can quickly review and approve submissions, ensuring a smooth workflow.
+                    With transparent record-keeping and role-based access, SCPMS promotes fairness, accountability, and active academic engagement. By simplifying the entire process, 
+                    we help students focus on learning and presenting their ideas, making conference participation more organized, efficient, and impactful for everyone.
+                    </p>
+                    
+                </div>
+            </div>
+            <footer className="contacts">
+                <div>
+                    <h2>Contact Us</h2>
+                    <p>
+                        <strong>Address:</strong> 12 Universtistsks Street, City Uzhhorod, Country Uzhhorod
+                    </p>
+                    <p>
+                        <strong>Phone:</strong> +1 234 567 890
+                    </p>
+                    <p>
+                        <strong>Email:</strong> info@scpms.edu
+                    </p>
+                </div>
+            </footer>
         </div>
-
     )
 }
 export default HomePage;
