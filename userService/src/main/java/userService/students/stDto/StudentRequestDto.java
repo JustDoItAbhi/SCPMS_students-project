@@ -10,4 +10,6 @@ public class StudentRequestDto {
     private String groupNumber;
     private String subGroupNumber;
     private String monitorName;
+    private String studentIdCardNumber;
+    private String passportNumber;
 }

@@ -9,7 +9,4 @@ import lombok.Setter;
 @Setter
 public class Roles extends  BaseModels{
     private String roleName;
-//    @ManyToOne
-//    @Column(name = "Id")
-//    private Users users;
 }
