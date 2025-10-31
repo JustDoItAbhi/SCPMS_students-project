@@ -33,19 +33,22 @@ const navigate=useNavigate();
     }
 
     return (
-        <>
+        <div style={{height:"100vh", background:"content-box radial-gradient(rgba(173, 153, 157, 1), rgba(110, 114, 119, 1))"}}>
             <Form
                 form={basicForm} 
                 name="basic"
                 onFinish={signup}
                 layout="vertical"
-                style={{ maxWidth: 400, margin: '0 auto', padding: '20px' }}
+                style={{ maxWidth: 400, margin: '0 auto', padding: '20px', color:"white"}}
             >
                 <Form.Item
                     label="Name"
                     name="name"
                     rules={[{ required: true, message: "Please enter your name" }]}
+                    
+   
                 >
+                    
                     <Input type="text" placeholder="Enter your name" />
                 </Form.Item>
 
@@ -94,16 +97,16 @@ const navigate=useNavigate();
                         type="primary" 
                         htmlType="submit" 
                         style={{ 
-                            background: '#1890ff', 
+                            background: '#9385a5ff', 
                             color: 'white', 
-                            border: 'none', 
+                            border: '2px solid', 
                             padding: '8px 16px', 
                             borderRadius: '4px',
                             cursor: 'pointer',
                             width: '100%'
                         }}
                     >
-                        Sign up
+                        SIGN UP
                     </Button>                    
                 </Form.Item>
             </Form>
@@ -124,7 +127,7 @@ const navigate=useNavigate();
                     </div>
                 )
             }
-        </>
+        </div>
     )
 }
 export default CreatingUsers;

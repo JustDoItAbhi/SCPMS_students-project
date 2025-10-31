@@ -21,7 +21,7 @@ import DeleteStudent from '../Students/DeleteStudent';
 
 function AppContent() {
   const location = useLocation();
-  const showNavBar = ['/USER', '/create', '/GetList', '/SENDOTP', '/dashboard', '/unauthorized'].includes(location.pathname)
+  const showNavBar = ['/USER',  '/GetList', '/SENDOTP', '/dashboard', '/unauthorized'].includes(location.pathname)
     || location.pathname.startsWith('/GetById/');
 
   return (

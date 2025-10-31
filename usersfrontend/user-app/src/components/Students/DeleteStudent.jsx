@@ -23,14 +23,14 @@ const delData=async()=>{
 
 
     return(
-        <div style={{ background:"content-box radial-gradient(rgb(124, 108, 111), rgb(39, 40, 41))"}}>
+        <div style={{ height:"100vh",background:"content-box radial-gradient(rgb(124, 108, 111), rgb(39, 40, 41))"}}>
 
         <Form
         form={basicForm}
         name="deleteStudentData"
         onFinish={delData}
         layout="vertical"
-        style={{ maxWidth: 400, margin: '0 auto', padding: '20px', background:"content-box radial-gradient(rgb(124, 108, 111), rgb(39, 40, 41))"}}
+        style={{ maxWidth: 400, margin: '0 auto', padding: '20px'}}
 >
     <Form.Item>
              <Button
@@ -40,12 +40,15 @@ const delData=async()=>{
                             background: '#1890ff',
                             color: 'white',
                             border: 'none',
-                            padding: '8px 16px',
-                            borderRadius: '4px',
+                            padding: '40px 16px',
+                            borderRadius: '10px',
                             cursor: 'pointer',
-                            width: '100%'
+                            width: '100%',
+                           marginLeft:"0vh",
+                           marginRight:"0vh"
+
                         }}>
-                               DELETE FORM DATA
+                               DELETE STUDENT FORM DATA
                 </Button>
 
     </Form.Item>

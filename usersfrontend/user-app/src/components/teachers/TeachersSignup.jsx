@@ -50,7 +50,7 @@ function TeachersSignup() {
     }, [userId]);
 
     return (
-        <>
+        <div style={{ height : "100vh",background:"content-box radial-gradient(rgba(173, 153, 157, 1), rgba(110, 114, 119, 1))"}}>
             <Form
                 form={basicForm}
                 name="teacherSignup"
@@ -120,7 +120,7 @@ function TeachersSignup() {
                 <p><strong>User ID from localStorage:</strong> {userId || 'Not found'}</p>
                 <p><strong>Teacher data loaded:</strong> {teacher ? 'Yes' : 'No'}</p>
             </div>
-        </>
+        </div>
     )
 }
 

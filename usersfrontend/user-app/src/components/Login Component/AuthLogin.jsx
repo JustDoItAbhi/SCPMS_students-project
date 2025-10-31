@@ -111,7 +111,7 @@ const AuthLogin = () => {
                 <div className="login-links">
                     <a href="/RESETPASSWORD">Forgot Password?</a>
                     <a href="/create">Create Account</a>
-                    <a href="/">Or login with OAuth2</a>
+                    {/* <a href="/">Or login with OAuth2</a> */}
                 </div>
             </div>
         </div>

@@ -32,7 +32,7 @@ function Login() {
 
 
   return (
-    <>
+    <div style={{ background:"content-box radial-gradient(rgba(173, 153, 157, 1), rgba(110, 114, 119, 1))"}}>
     
       <Form
         name="basic"
@@ -69,7 +69,7 @@ function Login() {
           </Button>
         </Form.Item>
       </Form>
-    </>
+    </div>
   );
 }
 

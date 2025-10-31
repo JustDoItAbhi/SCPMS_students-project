@@ -1,9 +1,13 @@
+.body{
+    margin: 0;
+    padding: 0;;
+}
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 94vh;
+    background: content-box radial-gradient(rgb(124, 108, 111), rgb(39, 40, 41));
     padding: 20px;
     width: 100%;
     top:0;

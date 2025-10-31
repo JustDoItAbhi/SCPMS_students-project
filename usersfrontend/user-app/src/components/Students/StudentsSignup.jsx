@@ -89,7 +89,7 @@ function StudentsSignup() {
     }, [studentDetails]);
 
     return (
-        <div style={{height: "100%", background:"content-box radial-gradient(rgba(124, 108, 111, 1), rgb(39, 40, 41))"}}>
+              <div style={{ background:"content-box radial-gradient(rgba(173, 153, 157, 1), rgba(110, 114, 119, 1))"}}>
             <Form
                 form={basicForm} // Fixed: basicFrom -> basicForm
                 name="studentSignup"
@@ -197,7 +197,7 @@ function StudentsSignup() {
                 margin: '20px auto',
                 fontSize: '12px'
             }}>
-                <h4>Debug Info:</h4>
+                <h4>YOUR DETAIL:</h4>
                 <p><strong>User ID from localStorage:</strong> {studentDetails || 'Not found'}</p>
                 <p><strong>Student data loaded:</strong> {student ? 'Yes' : 'No'}</p>
                 {student && <p><strong>Student ID:</strong> {student.id}</p>}
