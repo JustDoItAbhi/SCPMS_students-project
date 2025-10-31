@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CreateUser } from "../apis";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 
 function CreatingUsers() {
@@ -13,7 +13,7 @@ const navigate=useNavigate();
             // Add rolesList as an array if it's provided as string
             const userData = {
                 ...values,
-                 rolesList: values.rolesList ? [values.rolesList] : ['USER']
+                 rolesList: values.rolesList ? [values.rolesList] : ['STUDENT']
             };
             
             const signupUser = await CreateUser(userData);
@@ -21,9 +21,11 @@ const navigate=useNavigate();
             setUser(signupUser);
             message.success("User created successfully!");
             if(message.success){
-                navigate("/Login")
+            const userId=    localStorage.setItem("userId",signupUser.data.id);
+                console.log("USERID ",userId)
+                navigate("/login")
             }
-        
+     
         } catch (err) {
             console.log(err.message);
             message.error("Failed to create user");
@@ -33,7 +35,7 @@ const navigate=useNavigate();
     return (
         <>
             <Form
-                form={basicForm} // FIXED: Use form instance, not user state
+                form={basicForm} 
                 name="basic"
                 onFinish={signup}
                 layout="vertical"
@@ -77,9 +79,14 @@ const navigate=useNavigate();
                 <Form.Item
                     label="Role"
                     name="rolesList"
-                    initialValue="USER" // Set default value
+                    initialValue="STUDENT" 
+                    rules={[{required:true,message:"Please select a role"}]}
                 >
-                    <Input type="text" placeholder="Enter role (default: USER)" />
+                    <Select placeholder ="Select a role">
+                        <Select.Option value="STUDENT">STUDENT</Select.Option>
+                        <Select.Option value="TEACHER">TEACHER</Select.Option>
+                        <Select.Option values="APPLICANT_TEACHER">APPLICANT TEACHER</Select.Option>
+                    </Select>
                 </Form.Item>
 
                 <Form.Item>

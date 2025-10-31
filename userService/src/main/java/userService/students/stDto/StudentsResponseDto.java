@@ -9,6 +9,7 @@ import userService.registrations.entities.Users;
 @Setter
 public class StudentsResponseDto {
     private Users users;
+    private long studentId;
     private String currentYear;
     private String groupNumber;
     private String subGroupNumber;

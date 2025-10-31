@@ -27,8 +27,12 @@ body {
           box-sizing: border-box;
 }
 .scpms{
-    margin: 20vw;
+    /* margin: 20vw; */
+    margin-left: 15vw;
+    margin-right: 12vw;
+    padding: 42vh;
     color: wheat;
+  
 }
 .scpms span{
     opacity: 0;

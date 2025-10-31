@@ -35,6 +35,30 @@ export const CreateUser = async (values) => {
         throw err;
     }
 }
+export const getTeacherByID=async(userId,teacherData)=>{
+
+    try {
+        const teacherSignup = await axiosInstance.post(`/api/teachers/finishSignUP/${userId}`, {user:teacherData});
+        console.log("✅ CompleteTeacherSignup success:", teacherSignup);
+        return teacherSignup;
+    } catch (err) {
+        console.log("❌ CompleteTeacherSignup error:", err.message);
+        throw err;
+    }
+}
+
+export const getStudentByID=async(userId,studentData)=>{
+
+    try {
+        const studentSignup = await axiosInstance.post(`/api/students/completeStundentSignUp/${userId}`, studentData);
+        console.log("✅ Complete STUDENT Signup success:", studentSignup);
+        return studentSignup;
+    } catch (err) {
+        console.log("❌ Complete STUDENT Signup error:", err.message);
+        throw err;
+    }
+}
+
 export const LoginUser=async(value)=>{
     try{
         const login=await axiosInstance.post(`${BASE_URL}/Login`,value);
@@ -82,3 +106,13 @@ export const GetUserById=async(id)=>{
         console.log(err.message);
     }
 }
+ export const DeleteStudentDataFrom=async(studentId)=>{
+    try{
+        const response=await axiosInstance.delete(`api/students/delete/${studentId}`);
+        console.log(" deleted student BY ",response.data)
+        return response.data
+    }catch(err){
+        console.log(err.message);
+    }
+}
+

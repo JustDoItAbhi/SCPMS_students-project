@@ -15,6 +15,9 @@ import AuthLogin from '../Login Component/AuthLogin';
 import ROLE from '../constrains/Roles';
 import Unauthorized from '../Login Component/Unauthorized';
 import HomePage from '../home/HomePage';
+import StudentsSignup from '../Students/StudentsSignup';
+import TeachersSignup from '../teachers/TeachersSignup';
+import DeleteStudent from '../Students/DeleteStudent';
 
 function AppContent() {
   const location = useLocation();
@@ -41,6 +44,10 @@ function AppContent() {
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/create" element={<CreatingUsers />} />
         <Route path="/Home" element={<HomePage />} />
+        <Route path="/STUDENTSIGNUP" element={<StudentsSignup />} />
+        <Route path="/TEACHERSIGNUP" element={<TeachersSignup />} />
+        <Route path="/DELETESTUDENT" element={<DeleteStudent />} />
+
         <Route
           path="/GetList"
           element={

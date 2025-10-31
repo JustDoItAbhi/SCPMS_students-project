@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useAuth } from "./UseAuth";
 import { useNavigate } from "react-router-dom";
 import "./AuthLoginCss.css"
+import { GetUserById } from "../apis";
 
 const AuthLogin = () => {
     const [formData, setFormData] = useState({
-        email: "", 
+        email: "",
         password: ""
     });
     const [error, setError] = useState('');
@@ -29,23 +30,34 @@ const AuthLogin = () => {
         try {
             const response = await login(formData.email, formData.password);
             console.log("LOGIN RESPONSE ", response);
-            
+
             if (response && response.token) {
-                console.log("Login successful, redirecting...");
-                
+                console.log("Login successful, redirecting...",response);
+
                 // Get user ID from the stored user data
                 const userData = localStorage.getItem('user');
                 if (userData) {
-                    const user = JSON.parse(userData);
-                    navigate(`/GetById/${user.id}`);
+                    // const user = JSON.parse(userData);
+                    // navigate(`/GetById/${user.id}`);
+                        const userId = localStorage.getItem("userId");
+                    const getUser=await GetUserById(userId);
+                         console.log("get user from local , ",getUser.data.rolesList[0]);
+                         const role=getUser.data.rolesList[0];
+                    const userRole = role?.roles ||role?.[0];
+                    console.log("USER ROLE ", userRole);
+
+                    if (userRole === "STUDENT") {
+                        navigate("/STUDENTSIGNUP")
+                    } else if (userRole === "TEACHER") {
+                        navigate("/TEACHERSIGNUP")
+                    }
                 } else {
-                    // Fallback navigation
                     navigate('/profile');
                 }
             } else {
                 setError('Login successful but no token received');
             }
-            
+
         } catch (err) {
             console.error("Login error:", err);
             setError(err.response?.data?.error || err.message || 'Login failed');
@@ -71,7 +83,7 @@ const AuthLogin = () => {
                             placeholder="Enter your email"
                         />
                     </div>
-                    
+
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
                         <input
@@ -87,15 +99,15 @@ const AuthLogin = () => {
 
                     {error && <div className="error-message">{error}</div>}
 
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         className="login-button"
                         disabled={loading}
                     >
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
                 </form>
-                
+
                 <div className="login-links">
                     <a href="/RESETPASSWORD">Forgot Password?</a>
                     <a href="/create">Create Account</a>
