@@ -34,9 +34,7 @@ const handleSendOtp = async () => {
 
 
     return(
-    
-
-       <div style={{ margin:"0px",height:"100vh", textAlign: "center", background:"content-box radial-gradient(rgba(173, 153, 157, 1), rgba(110, 114, 119, 1))"}}>
+    <div style={{ margin:"0px",height:"100vh", textAlign: "center", background:"content-box radial-gradient(rgba(173, 153, 157, 1), rgba(110, 114, 119, 1))"}}>
       <h2>Send OTP</h2>
       <input
         type="email"

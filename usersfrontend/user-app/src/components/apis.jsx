@@ -116,3 +116,47 @@ export const GetUserById=async(id)=>{
     }
 }
 
+const formatYear = (year) => {
+  if (typeof year === 'number') {
+    year = year.toString();
+  }
+  
+  if (year.endsWith('st') || year.endsWith('nd') || year.endsWith('rd') || year.endsWith('th')) {
+    return year; // Already formatted
+  }
+  
+  const lastDigit = year.charAt(year.length - 1);
+  switch (lastDigit) {
+    case '1': return year + 'st';
+    case '2': return year + 'nd';
+    case '3': return year + 'rd';
+    default: return year + 'th';
+  }
+};
+
+ export const GetSubjectByYear=async(year)=>{
+    try{
+        const formattedYear = formatYear(year);
+        const response=await axiosInstance.get(`/api/subject/getByYear/${formattedYear}`);
+        console.log("SUBJECTS BY YEAR ",response.data)
+        return response.data
+    }catch(err){
+        console.log(err.message);
+    }
+}
+
+// API function to register subjects
+export const registerSubjects = async (studentId, year, subjects) => {
+  try {
+    const formattedYear = formatYear(year);
+    const response = await axios.post(`${API_BASE_URL}/register`, {
+      studentId,
+      year: formattedYear,
+      subjects
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error registering subjects:', error);
+    throw error;
+  }
+};

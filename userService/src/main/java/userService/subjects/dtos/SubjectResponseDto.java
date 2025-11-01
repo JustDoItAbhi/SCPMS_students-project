@@ -10,5 +10,5 @@ import java.util.List;
 @Setter
 public class SubjectResponseDto {
     private String courseYear;
-    private String  subjectsList;
+    private List<String>  subjectsList;
 }

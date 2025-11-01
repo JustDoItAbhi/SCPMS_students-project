@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getStudentByID } from "../apis";
 import { Button, Form, Input, message } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function StudentsSignup() {
     const [student, setStudent] = useState(null);
@@ -34,12 +34,9 @@ function StudentsSignup() {
 
                 if (studentData.passportNumber && studentData.studentIdCardNumber) {
                     message.success("Student profile completed successfully!");
-                    // navigate("/student-dashboard");
                 } else {
                     message.warning("Some fields may not have been saved correctly");
                 }
-                
-                // Check if student data is complete
                 if (studentData.error) {
                     navigate("/DELETESTUDENT");
                 } else if (
@@ -50,10 +47,10 @@ function StudentsSignup() {
                     !studentData.studentIdCardNumber || 
                     !studentData.passportNumber
                 ) {
-                    // If any required field is missing, show message but don't navigate
                     message.warning("Please complete all student information");
                 } else {
                     message.success("Student profile completed successfully!");
+                    navigate("/Student-dashboard")
                 }
             }
 
@@ -150,7 +147,7 @@ function StudentsSignup() {
                         type="primary"
                         htmlType="submit"
                         style={{
-                            background: '#1890ff',
+                            background: '#adb3b8ff',
                             color: 'white',
                             border: 'none',
                             padding: '8px 16px',
@@ -160,6 +157,23 @@ function StudentsSignup() {
                         }}
                     >
                         COMPLETE STUDENTS SIGNUP
+                    </Button>
+                    <br/>
+                       <br/>
+                        <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{
+                            background: '#adb3b8ff',
+                            color: 'white',
+                            border: 'none',
+                            padding: '8px 16px',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            width: '100%'
+                        }}
+                    >
+                        IF ALREADY REGISTERED ? <Link to="/Student-dashboard"> Click Here</Link>
                     </Button>
                 </Form.Item>
             </Form>

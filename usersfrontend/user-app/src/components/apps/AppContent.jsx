@@ -18,6 +18,7 @@ import HomePage from '../home/HomePage';
 import StudentsSignup from '../Students/StudentsSignup';
 import TeachersSignup from '../teachers/TeachersSignup';
 import DeleteStudent from '../Students/DeleteStudent';
+import SubjectYear from '../constrains/Dashboard/SubjectYear';
 
 function AppContent() {
   const location = useLocation();
@@ -47,6 +48,8 @@ function AppContent() {
         <Route path="/STUDENTSIGNUP" element={<StudentsSignup />} />
         <Route path="/TEACHERSIGNUP" element={<TeachersSignup />} />
         <Route path="/DELETESTUDENT" element={<DeleteStudent />} />
+        <Route path="/Student-dashboard" element={<SubjectYear />} />
+        
 
         <Route
           path="/GetList"

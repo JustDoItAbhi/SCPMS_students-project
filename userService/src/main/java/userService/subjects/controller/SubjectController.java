@@ -19,7 +19,7 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.addSubjectByYear(dto));
     }
     @GetMapping("/getByYear/{year}")
-    public ResponseEntity<List<SubjectResponseDto>>findBYyEAR(@PathVariable ("year")String year){
+    public ResponseEntity<SubjectResponseDto>findBYyEAR(@PathVariable ("year")String year){
         return ResponseEntity.ok(subjectService.getSubhectByYear(year));
     }
 }
