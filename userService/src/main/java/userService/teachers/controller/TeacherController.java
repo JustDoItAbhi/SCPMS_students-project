@@ -3,6 +3,8 @@ package userService.teachers.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import userService.subjects.dtos.SubjectRequestDto;
+import userService.subjects.dtos.SubjectResponseDto;
 import userService.teachers.service.TeacherService;
 import userService.teachers.teachersDtos.TeacherForStudentsResponseDto;
 import userService.teachers.teachersDtos.TeacherRequestDto;
@@ -23,4 +25,5 @@ public class TeacherController {
     public ResponseEntity<List<TeacherForStudentsResponseDto>> findBySubject(@PathVariable ("subject")String subect){
         return ResponseEntity.ok(teacherService.listOfTeachersBySubject(subect));
     }
+
 }

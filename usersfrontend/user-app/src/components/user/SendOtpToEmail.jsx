@@ -36,14 +36,14 @@ const handleSendOtp = async () => {
     return(
     
 
-       <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
+       <div style={{ margin:"0px",height:"100vh", textAlign: "center", background:"content-box radial-gradient(rgba(173, 153, 157, 1), rgba(110, 114, 119, 1))"}}>
       <h2>Send OTP</h2>
       <input
         type="email"
         placeholder="Enter your email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        style={{ padding: "8px", width: "100%", marginBottom: "10px" }}
+        style={{ padding: "8px", width: "30vw", marginBottom: "10px" }}
       />
       <button
         onClick={handleSendOtp}
