@@ -3,17 +3,19 @@ import { Card, List, Checkbox, Button, Typography, Alert, Spin } from 'antd';
 import { BookOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import './SubjectYear.css';
-import { GetSubjectByYear } from '../../apis';
+import { GetSubjectByYear, registerSubjects } from '../apis';
 import "./SubjectYear.css"
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
-
+const navigator= useNavigate();
 const SubjectYear = () => {
     const [selectedYear, setSelectedYear] = useState('');
     const [subjects, setSubjects] = useState([]);
     const [selectedSubjects, setSelectedSubjects] = useState([]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ type: '', content: '' });
+    const [chhoseSeubject, setChoosenSubject] = useState('');
 
     const years = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
 
@@ -22,6 +24,7 @@ const SubjectYear = () => {
         setLoading(true);
         setMessage({ type: '', content: '' });
         try {
+            
             const response = await GetSubjectByYear(year);
             setSubjects(response.subjectsList || []);
             setSelectedSubjects([]); // Reset selections when year changes
@@ -58,21 +61,24 @@ const SubjectYear = () => {
     };
 
     // Handle subject registration
-    const handleRegisterSubjects = async () => {
+    const handleRegisterSubjects = async (value) => {
         if (selectedSubjects.length === 0) {
             setMessage({ 
                 type: 'warning', 
                 content: 'Please select at least one subject' 
             });
+            console.log("SUBJECT REGISTERED ",selectedSubjects)
+            setChoosenSubject(selectedSubjects);
+            navigator("/TOPIC-SELECTION")
             return;
         }
 
         setLoading(true);
         try {
-            // Replace 'CURRENT_STUDENT_ID' with actual student ID from your auth context
             const studentId = localStorage.getItem('studentId') || 'CURRENT_STUDENT_ID';
             
-            await registerSubjects(studentId, selectedYear, selectedSubjects);
+        const registerSubject=  await registerSubjects(studentId, selectedYear,selectedSubjects);
+          console.log("RESPONSE FROM SUBJECT ",registerSubject)
 
             setMessage({ 
                 type: 'success', 
@@ -105,11 +111,15 @@ const SubjectYear = () => {
         setSelectedSubjects([...subjects]);
     };
 
+    const user=localStorage.getItem("user");
+console.log("USER", typeof user === 'string' ? JSON.parse(user)?.username : user?.username);
+const userName=typeof user === 'string' ? JSON.parse(user)?.username : user?.username
+
     return (
         <div className="subject-year-container">
             <Card className="subject-year-card">
                 <Title level={2} className="page-title" style={{color:"white"}}>
-                    <BookOutlined /> Select Your Subjects
+                    <BookOutlined /> {userName} Your Subjects
                 </Title>
                 
                 {/* Year Selection */}

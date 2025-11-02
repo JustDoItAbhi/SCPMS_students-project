@@ -9,4 +9,5 @@ import java.util.List;
 public interface TeacherService {
     TeacherResponseDto completeSignup(long id,TeacherRequestDto dto);
     List<TeacherForStudentsResponseDto> listOfTeachersBySubject(String subject);
+    boolean deteteTeacher(long id);
 }

@@ -5,7 +5,7 @@ const BASE_URL="http://localhost:8080/api/user"
 export const GetAllUsers = async () => {
     try {
         console.log("🔍 Making GetAllUsers API call...");
-        const response = await axiosInstance.get("/api/user/");
+        const response = await axiosInstance.get("/api/user/allUsers");
         console.log("✅ GetAllUsers success:", response.data);
         return response.data;
     } catch (err) {
@@ -61,27 +61,38 @@ export const getStudentByID=async(userId,studentData)=>{
 
 export const LoginUser=async(value)=>{
     try{
-        const login=await axiosInstance.post(`${BASE_URL}/Login`,value);
+        const login=await axiosInstance.post(`/api/user//Login`,value);
         console.log("LOGIN USERS",login.data)
         return login.data
     }catch(err){
         console.log(err.message);
     }
 }
-export const DeleteUser=async(value)=>{
+export const DeleteUser=async(id)=>{
     try{
-        const login=await axiosInstance.get(`${BASE_URL}/Login`,value);
-        console.log("LOGIN USERS",login.data)
-        return login.data
+        const removeUser=await axiosInstance.delete(`/api/user/DeleteUserById/${id}`);
+        console.log("DELETE USERS",removeUser.data)
+        return removeUser.data
     }catch(err){
         console.log(err.message);
     }
 }
 
+export const DeleteSubject=async(id)=>{
+    try{
+        const removeUser=await axiosInstance.delete(`/api/students/deleteSubject/${id}`);
+        console.log("DELETE USERS",removeUser.data)
+        return removeUser.data
+    }catch(err){
+        console.log(err.message);
+    }
+}
+
+
 export const GetUserById=async(id)=>{
     try{
-        const response=await axiosInstance.get(`${BASE_URL}/getUserById/${id}`);
-        console.log(" USERS BY ID",response)
+        const response=await axiosInstance.get(`/api/user/getUserById/${id}`);
+        console.log(" USERS BY ID",response.data)
         return response
     }catch(err){
         console.log(err.message);
@@ -116,6 +127,28 @@ export const GetUserById=async(id)=>{
     }
 }
 
+ export const DeleteFullUserDetails=async(userId)=>{
+    try{
+        const response=await axiosInstance.delete(`/api/students/deleteFullUser/${userId}`);
+        console.log(" deleted student BY ",response.data)
+        return response.data
+    }catch(err){
+        console.log(err.message);
+    }
+}
+
+
+ export const GetStudentDetailById=async(id)=>{
+    try{
+        const response=await axiosInstance.get(`/api/students/getStudentById/${id}`);
+        console.log("  student BY id ",response.data)
+        return response.data
+    }catch(err){
+        console.log(err.message);
+    }
+}
+
+
 const formatYear = (year) => {
   if (typeof year === 'number') {
     year = year.toString();
@@ -145,18 +178,33 @@ const formatYear = (year) => {
     }
 }
 
-// API function to register subjects
-export const registerSubjects = async (studentId, year, subjects) => {
+
+ export const GetSubjectAndStudentAllDetailsById=async(userId)=>{
+    try{
+        const response=await axiosInstance.get(`/api/students/getStudentSubjectDetails/${userId}`);
+        console.log("SUBJECTS BY ID ",response.data)
+        return response.data
+    }catch(err){
+        console.log(err.message);
+    }
+}
+
+export const registerSubjects = async (id, year, subjects) => {
   try {
     const formattedYear = formatYear(year);
-    const response = await axios.post(`${API_BASE_URL}/register`, {
-      studentId,
-      year: formattedYear,
-      subjects
+    
+    const subjectValue = Array.isArray(subjects) ? subjects[0] : subjects;//ITS A SINGLE SUBJECT 
+    
+    const response = await axiosInstance.post(`api/students/selectSubject/${id}`, { 
+      subjectYear: formattedYear,  // Change 'year' to 'subjectYear'
+      subject: subjectValue         // Ensure this is a string, not array
     });
+    
+    console.log("REGISTERED SUBJECT", response.data);
     return response.data;
   } catch (error) {
     console.error('Error registering subjects:', error);
     throw error;
   }
 };
+

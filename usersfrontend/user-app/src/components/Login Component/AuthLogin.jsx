@@ -32,25 +32,39 @@ const AuthLogin = () => {
             console.log("LOGIN RESPONSE ", response);
 
             if (response && response.token) {
-                console.log("Login successful, redirecting...",response);
+                console.log("Login successful, redirecting...", response);
 
                 // Get user ID from the stored user data
-                const userData = localStorage.getItem('user');
+                const userData = JSON.parse(localStorage.getItem('user'));
+                console.log("USER ID", userData?.id)
+                const userId=userData?.id
+                localStorage.setItem("userId",userId);
                 if (userData) {
+
                     // const user = JSON.parse(userData);
                     // navigate(`/GetById/${user.id}`);
-                        const userId = localStorage.getItem("userId");
-                    const getUser=await GetUserById(userId);
-                         console.log("get user from local , ",getUser.data.rolesList[0]);
-                         const role=getUser.data.rolesList[0];
-                    const userRole = role?.roles ||role?.[0];
+                    const userId = localStorage.getItem("userId");
+                    const getUser = await GetUserById(userId);
+                    console.log("userId",userId)
+                    // console.log("get user from local , ", getUser.data.rolesList[0]);
+                    const role = getUser.data.rolesList[0];
+                    const userRole = role?.roles || role?.[0];
                     console.log("USER ROLE ", userRole);
-
-                    if (userRole === "STUDENT") {
+                    const studentId = localStorage.getItem("studentId");
+                    if (!studentId && studentId==="undefined") {
                         navigate("/STUDENTSIGNUP")
-                    } else if (userRole === "TEACHER") {
-                        navigate("/TEACHERSIGNUP")
+                    } else if(studentId){
+                        navigate("/Student-dashboard")
                     }
+                    else {
+                        if (userRole === "STUDENT") {
+                            navigate("/STUDENTSIGNUP")
+                        } else if (userRole === "TEACHER") {
+                            navigate("/TEACHERSIGNUP")
+                        }
+                    }
+
+
                 } else {
                     navigate('/profile');
                 }

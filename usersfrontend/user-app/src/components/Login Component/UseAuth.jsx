@@ -70,7 +70,7 @@ const login = async (email, password) => {
             ...userData,
              username: username,
             roles: decodedToken.roles || [],
-            grantAuthority: decodedToken.roles?.[0] || 'USER'
+            grantAuthority: decodedToken.roles 
         };
         
         console.log("Complete user data to store:", completeUserData);

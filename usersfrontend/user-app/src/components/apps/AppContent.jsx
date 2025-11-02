@@ -18,7 +18,11 @@ import HomePage from '../home/HomePage';
 import StudentsSignup from '../Students/StudentsSignup';
 import TeachersSignup from '../teachers/TeachersSignup';
 import DeleteStudent from '../Students/DeleteStudent';
-import SubjectYear from '../constrains/Dashboard/SubjectYear';
+import SubjectYear from '../Dashboard/SubjectYear';
+import RegisterToSubject from '../Dashboard/RegisterToSubject';
+import Profile from '../home/Profile';
+import StudentTopic from '../Dashboard/StudentTopic';
+
 
 function AppContent() {
   const location = useLocation();
@@ -49,6 +53,9 @@ function AppContent() {
         <Route path="/TEACHERSIGNUP" element={<TeachersSignup />} />
         <Route path="/DELETESTUDENT" element={<DeleteStudent />} />
         <Route path="/Student-dashboard" element={<SubjectYear />} />
+        <Route path='/REGISTER-SUBJECT' element={<RegisterToSubject/>}/>
+        <Route path='/USER-PROFILE' element={<Profile/>}/>
+        <Route path='/TOPIC-SELECTION' element={<StudentTopic/>}/>
         
 
         <Route
@@ -64,7 +71,7 @@ function AppContent() {
           element={
             <ProtectedRoute requiredRole={ROLE.ADMIN}>
               <Users />
-            </ProtectedRoute>
+             </ProtectedRoute>
           }
         />
 

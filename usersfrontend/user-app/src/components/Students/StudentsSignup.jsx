@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getStudentByID } from "../apis";
+import { getStudentByID, GetStudentDetailById} from "../apis";
 import { Button, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -8,22 +8,24 @@ function StudentsSignup() {
     const [basicForm] = Form.useForm(); // Fixed typo: basicFrom -> basicForm
     const navigate = useNavigate();
 
-    const studentDetails = localStorage.getItem("userId");
+    const userDetails = localStorage.getItem("userId");
+
+
 
     const getData = async (values) => { // Changed parameter name to 'values'
         try {
-            if (!studentDetails) {
-                console.log("ERROR user id not defined", studentDetails);
+            if (!userDetails) {
+                console.log("ERROR user id not defined", userDetails);
                 message.error("User ID not found");
                 return;
             }
             
-            const findStudent = await getStudentByID(studentDetails, values);
+            const findStudent = await getStudentByID(userDetails, values);
             console.log("STUDENT RESPONSE ", findStudent.data);
             
             if (findStudent && findStudent.data) {
                 console.log("STUDENT FOUND ", findStudent.data);
-                const studentData = findStudent.data; // Fixed: use findStudent.data, not fetchStudentData.data
+                const studentData = findStudent.data; 
                 setStudent(studentData);
 
 
@@ -50,7 +52,6 @@ function StudentsSignup() {
                     message.warning("Please complete all student information");
                 } else {
                     message.success("Student profile completed successfully!");
-                    navigate("/Student-dashboard")
                 }
             }
 
@@ -61,12 +62,19 @@ function StudentsSignup() {
     }
 
     const fetchStudentData = async () => {
-        if (studentDetails) {
+        console.log("student data ",userDetails)
+        if (userDetails) {
             try {
-                // If you have a GET endpoint to fetch existing student data
-                // const existingData = await getStudentByID(studentDetails);
+                const getStudent=await GetStudentDetailById(userDetails);
+              if(getStudent){
+                console.log("STUDENT DETAILS ",getStudent);
+
+                localStorage.setItem("studentId",getStudent.studentId);
+
+                navigate("/Student-dashboard")
+            }
                 // setStudent(existingData.data);
-                console.log("Student ID available:", studentDetails);
+                console.log("Student ID available:", userDetails);
             } catch (err) {
                 console.log("Error fetching student data:", err.message);
             }
@@ -77,13 +85,13 @@ function StudentsSignup() {
     }
 
     useEffect(() => {
-        if (studentDetails) {
+        if (userDetails) {
             fetchStudentData();
         } else {
             console.log("❌ No user ID found in localStorage");
             message.error("Please complete user registration first");
         }
-    }, [studentDetails]);
+    }, [userDetails]);
 
     return (
               <div style={{ background:"content-box radial-gradient(rgba(173, 153, 157, 1), rgba(110, 114, 119, 1))"}}>
@@ -173,7 +181,7 @@ function StudentsSignup() {
                             width: '100%'
                         }}
                     >
-                        IF ALREADY REGISTERED ? <Link to="/Student-dashboard"> Click Here</Link>
+                        {/* IF ALREADY REGISTERED ? <Link to="/Student-dashboard"> Click Here</Link> */}
                     </Button>
                 </Form.Item>
             </Form>
@@ -212,7 +220,7 @@ function StudentsSignup() {
                 fontSize: '12px'
             }}>
                 <h4>YOUR DETAIL:</h4>
-                <p><strong>User ID from localStorage:</strong> {studentDetails || 'Not found'}</p>
+                <p><strong>User ID from localStorage:</strong> {userDetails || 'Not found'}</p>
                 <p><strong>Student data loaded:</strong> {student ? 'Yes' : 'No'}</p>
                 {student && <p><strong>Student ID:</strong> {student.id}</p>}
             </div>

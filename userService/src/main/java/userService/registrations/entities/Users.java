@@ -19,7 +19,8 @@ public class Users extends BaseModels{
     private String email;
     private String password;
     private String address;
-    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER,cascade =
+            {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),

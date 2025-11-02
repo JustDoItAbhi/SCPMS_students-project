@@ -58,6 +58,13 @@ public class TeachersServiceImpl implements TeacherService{
         }
         return responseDtos;
     }
+
+    @Override
+    public boolean deteteTeacher(long id) {
+        teacherRepository.deleteById(id);
+        return true;
+    }
+
     private TeacherForStudentsResponseDto forStudents(Teachers teachers){
         TeacherForStudentsResponseDto dto=new TeacherForStudentsResponseDto();
         dto.setSubject(teachers.getSubject());

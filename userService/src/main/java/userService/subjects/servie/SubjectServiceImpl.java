@@ -52,13 +52,14 @@ public class SubjectServiceImpl implements SubjectService{
     private SubjectResponseDto fromEntity(Subjects subjects){
         SubjectResponseDto dto=new SubjectResponseDto();
         dto.setCourseYear(subjects.getCourseYear());
-
         List<String >subjectName=new ArrayList<>();
         subjectName.add(subjects.getSubject());
-
         dto.setSubjectsList(subjectName);
     return dto;
     }
+// CREATE AN API WHERE STUDENT WILL SELECT THE SUBJECT WITH YEAR , AND  STUDENT ID
+// AND FIND TEACHER AND THEN SELECT TEACHER AND THEN WRITE HIS THOUGHTS ABOUT CONFERENCE
+
 
 
 }

@@ -25,5 +25,9 @@ public class TeacherController {
     public ResponseEntity<List<TeacherForStudentsResponseDto>> findBySubject(@PathVariable ("subject")String subect){
         return ResponseEntity.ok(teacherService.listOfTeachersBySubject(subect));
     }
+    @DeleteMapping("/deleteTeacher/{id}")
+    public ResponseEntity<Boolean> deleteTeacher(@PathVariable ("id")long id){
+        return ResponseEntity.ok(teacherService.deteteTeacher(id));
+    }
 
 }
