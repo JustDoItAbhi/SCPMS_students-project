@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class TopicResponeDto {
     private long teacherId;
-    private long studentandSubjectId;
+    private SelectSubjectAndStudentDetailsResponseDto selectSubjectAndStudentDetailsResponseDto;
     private String topic;
 }

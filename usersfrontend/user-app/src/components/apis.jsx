@@ -183,6 +183,8 @@ const formatYear = (year) => {
     try{
         const response=await axiosInstance.get(`/api/students/getStudentSubjectDetails/${userId}`);
         console.log("SUBJECTS BY ID ",response.data)
+        console.log("SUBJECTS BY ID STORE ",response.data.studentAndSubjectId)
+        localStorage.setItem("studentAndSubjectId",response.data.studentAndSubjectId)
         return response.data
     }catch(err){
         console.log(err.message);
@@ -208,3 +210,47 @@ export const registerSubjects = async (id, year, subjects) => {
   }
 };
 
+ export const GetAllTeachersBySubjectName=async(subject)=>{
+    try{
+        const response=await axiosInstance.get(`/api/teachers/subject/${subject}`);
+        console.log("TEACHRS BY SUBJECTS ",response.data)
+        return response.data
+    }catch(err){
+        console.log(err.message);
+    }
+}
+//  export const WriteTopic=async(values)=>{
+//       try {
+//         // Get student info from localStorage
+//         const studentId = localStorage.getItem("studentId");
+//         const studentandSubjectId = localStorage.getItem("studentandSubjectId"); // You might need to store this
+        
+//         // Construct request body matching the backend DTO
+//         const requestBody = {
+//             teacherId: values.teacherId, // Backend expects teacherId, not teacherEmail
+//             studentandSubjectId: studentandSubjectId || values.studentandSubjectId, // This is required
+//             topic: values.topic
+//         };
+
+//         console.log("Sending topic request:", requestBody);
+
+//         const response = await axiosInstance.post(`/api/students/writeTopic`, values);
+//         console.log("Topic submitted successfully:", response.data);
+//         return response.data;
+//     } catch (err) {
+//         console.error("Error submitting topic:", err.response?.data || err.message);
+//         throw err;
+//     }
+// }
+
+ export const WriteTopic=async(values)=>{
+      try {
+     
+        const response = await axiosInstance.post(`/api/students/writeTopic`, values);
+        console.log("Topic submitted successfully:", response.data);
+        return response.data;
+    } catch (err) {
+        console.error("Error submitting topic:", err.response?.data || err.message);
+        throw err;
+    }
+}

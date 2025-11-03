@@ -8,7 +8,7 @@ import userService.students.stDto.TopicResponeDto;
 public class SubjectAndStudentMapper {
     public static TopicResponeDto fromTopicEntity(StudentTopic topic){
         TopicResponeDto dto=new TopicResponeDto();
-        dto.setStudentandSubjectId(topic.getStudentandSubjectId());
+        dto.setSelectSubjectAndStudentDetailsResponseDto(selectingFromEntityselectYourSubject(topic.getStudentAndSubject()));
         dto.setTeacherId(topic.getTeacherId());
         dto.setTopic(topic.getTopic());
         return dto;

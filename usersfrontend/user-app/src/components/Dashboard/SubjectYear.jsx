@@ -5,11 +5,12 @@ import axios from 'axios';
 import './SubjectYear.css';
 import { GetSubjectByYear, registerSubjects } from '../apis';
 import "./SubjectYear.css"
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
-const navigator= useNavigate();
 const SubjectYear = () => {
+const navigator= useNavigate();
+
     const [selectedYear, setSelectedYear] = useState('');
     const [subjects, setSubjects] = useState([]);
     const [selectedSubjects, setSelectedSubjects] = useState([]);
@@ -55,6 +56,8 @@ const SubjectYear = () => {
     const handleSubjectSelect = (subject, checked) => {
         if (checked) {
             setSelectedSubjects(prev => [...prev, subject]);
+            console.log(subject);
+            localStorage.setItem("subject",subject);
         } else {
             setSelectedSubjects(prev => prev.filter(sub => sub !== subject));
         }
@@ -67,8 +70,9 @@ const SubjectYear = () => {
                 type: 'warning', 
                 content: 'Please select at least one subject' 
             });
-            console.log("SUBJECT REGISTERED ",selectedSubjects)
+            console.log("SUBJECT REGISTERED ",selectedSubjects?.subject)
             setChoosenSubject(selectedSubjects);
+
             navigator("/TOPIC-SELECTION")
             return;
         }
@@ -78,13 +82,13 @@ const SubjectYear = () => {
             const studentId = localStorage.getItem('studentId') || 'CURRENT_STUDENT_ID';
             
         const registerSubject=  await registerSubjects(studentId, selectedYear,selectedSubjects);
-          console.log("RESPONSE FROM SUBJECT ",registerSubject)
+          console.log("RESPONSE FROM SUBJECT ",registerSubject.subject)
 
             setMessage({ 
                 type: 'success', 
                 content: `Successfully registered ${selectedSubjects.length} subject(s) for ${selectedYear} year` 
             });
-            
+
             // Clear selections after successful registration
             setSelectedSubjects([]);
             
@@ -232,6 +236,7 @@ const userName=typeof user === 'string' ? JSON.parse(user)?.username : user?.use
                                         size="large"
                                     >
                                         Register Selected Subjects ({selectedSubjects.length})
+                                        <Link to="/TOPIC-SELECTION" ></Link>
                                     </Button>
                                 </div>
                             </>

@@ -29,13 +29,14 @@ function StudentsSignup() {
                 setStudent(studentData);
 
 
-                console.log("STUDENT ID ", studentData.id);
+                console.log("STUDENT ID ", studentData.studentId);
                 localStorage.setItem("studentId",studentData.studentId);
  
 
 
                 if (studentData.passportNumber && studentData.studentIdCardNumber) {
                     message.success("Student profile completed successfully!");
+                    navigate("/Student-dashboard")
                 } else {
                     message.warning("Some fields may not have been saved correctly");
                 }
@@ -154,6 +155,7 @@ function StudentsSignup() {
                     <Button
                         type="primary"
                         htmlType="submit"
+                        onClick={fetchStudentData}
                         style={{
                             background: '#adb3b8ff',
                             color: 'white',
@@ -181,7 +183,7 @@ function StudentsSignup() {
                             width: '100%'
                         }}
                     >
-                        {/* IF ALREADY REGISTERED ? <Link to="/Student-dashboard"> Click Here</Link> */}
+                        IF ALREADY REGISTERED ? <Link to="/Student-dashboard"> Click Here</Link>
                     </Button>
                 </Form.Item>
             </Form>

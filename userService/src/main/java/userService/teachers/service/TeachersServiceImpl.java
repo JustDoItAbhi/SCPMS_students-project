@@ -48,7 +48,11 @@ public class TeachersServiceImpl implements TeacherService{
 
     @Override
     public List<TeacherForStudentsResponseDto> listOfTeachersBySubject(String subject) {
-        List<Teachers>bySubjectTeacher=teacherRepository.findBySubject(subject);
+        String cleanedSubject = cleanSubjectName(subject);
+        List<Teachers>bySubjectTeacher=teacherRepository.findBySubjectIgnoreCaseAndTrim(cleanedSubject);
+        if(bySubjectTeacher.isEmpty()){
+            bySubjectTeacher = teacherRepository.findBySubjectContainingIgnoreCaseAndTrim(cleanedSubject);
+        }
         if(bySubjectTeacher.isEmpty()){
             throw new UserExceptions("NO TEACHER SELECTED THIS TOPIC YET PLEASE TRY AGAIN LATER "+subject);
         }
@@ -58,7 +62,14 @@ public class TeachersServiceImpl implements TeacherService{
         }
         return responseDtos;
     }
+    private String cleanSubjectName(String subject) {
+        if (subject == null) return "";
 
+        return subject.trim()
+                .toLowerCase()
+                .replaceAll("\\s+", " ") // Replace multiple spaces with single space
+                .trim();
+    }
     @Override
     public boolean deteteTeacher(long id) {
         teacherRepository.deleteById(id);
@@ -68,6 +79,7 @@ public class TeachersServiceImpl implements TeacherService{
     private TeacherForStudentsResponseDto forStudents(Teachers teachers){
         TeacherForStudentsResponseDto dto=new TeacherForStudentsResponseDto();
         dto.setSubject(teachers.getSubject());
+        dto.setTeacherId(teachers.getId());
         dto.setTeacherEmail(teachers.getUsers().getEmail());
         return dto;
     }

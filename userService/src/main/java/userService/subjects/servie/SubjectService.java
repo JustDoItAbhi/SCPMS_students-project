@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface SubjectService {
     SubjectResponseDto addSubjectByYear(SubjectRequestDto dto);
+
     SubjectResponseDto getSubhectByYear(String Year);
 }

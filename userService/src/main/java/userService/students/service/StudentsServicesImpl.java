@@ -110,7 +110,7 @@ public class StudentsServicesImpl implements StudentsService{
     public TopicResponeDto submitTopic(TopicRequestDto dto) {
         Optional<Teachers>exsitingTeacher=teacherRepository.findById(dto.getTeacherId());
         if(exsitingTeacher.isEmpty()){
-            throw new UserExceptions("PLEASE CHOOSE A VALID TEACHER FOR SUBJECT TOPIC "+dto.getTeacherId());
+            throw new UserExceptions("PLEASE CHOOSE A VALID TEACHER FOR SUBJECT TOPIC "+ dto.getTeacherId());
         }
         Optional<StudentAndSubject>studentAndSubject=studentSubjectRepo.findById(dto.getStudentandSubjectId());
         if(studentAndSubject.isEmpty()){
@@ -122,7 +122,11 @@ public class StudentsServicesImpl implements StudentsService{
         }
         StudentTopic topic=new StudentTopic();
         topic.setTeacherId(dto.getTeacherId());
-        topic.setStudentandSubjectId(dto.getStudentandSubjectId());
+        Optional<StudentAndSubject>subject=studentSubjectRepo.findById(dto.getStudentandSubjectId());
+        if(subject.isEmpty()){
+            throw new UserExceptions("INVALID STUDENT ID "+dto.getStudentandSubjectId());
+        }
+        topic.setStudentAndSubject(subject.get());
         topic.setTopic(dto.getTopic());
         studentTopicRepo.save(topic);
         return SubjectAndStudentMapper.fromTopicEntity(topic);
