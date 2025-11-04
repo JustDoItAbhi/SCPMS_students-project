@@ -6,12 +6,19 @@ import userService.registrations.entities.Users;
 import userService.registrations.exceptions.UserExceptions;
 import userService.registrations.repos.RolesRepository;
 import userService.registrations.repos.UserRepository;
+import userService.students.mapper.SubjectAndStudentMapper;
+import userService.students.modals.StudentTopic;
+import userService.students.stDto.SelectSubjectAndStudentDetailsResponseDto;
+import userService.students.stDto.TopicResponeDto;
+import userService.students.studentRepo.StudentTopicRepo;
 import userService.students.studentRepo.StudentsRepository;
+import userService.teachers.TeacherMapper;
 import userService.teachers.modal.Teachers;
 import userService.teachers.repos.TeacherRepository;
 import userService.teachers.teachersDtos.TeacherForStudentsResponseDto;
 import userService.teachers.teachersDtos.TeacherRequestDto;
 import userService.teachers.teachersDtos.TeacherResponseDto;
+import userService.teachers.teachersDtos.TopicForTeacherResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +32,8 @@ public class TeachersServiceImpl implements TeacherService{
     private RolesRepository rolesRepository;
     @Autowired
     private TeacherRepository teacherRepository;
+    @Autowired
+    private StudentTopicRepo studentTopicRepo;
     @Override
     public TeacherResponseDto completeSignup(long id, TeacherRequestDto dto) {
         Optional<Users> existingUsers=userRepository.findById(id);
@@ -74,6 +83,24 @@ public class TeachersServiceImpl implements TeacherService{
     public boolean deteteTeacher(long id) {
         teacherRepository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public List<TopicForTeacherResponseDto> getAllTheTopicRequestByTeacherId(long teacherId) {
+        List<StudentTopic>bySubjectTeacher=studentTopicRepo.findByTeacherId(teacherId);
+        if(bySubjectTeacher.isEmpty()){
+            throw new UserExceptions("NO NEW TOPIC REQUEST YET");
+        }
+        List<TopicForTeacherResponseDto>responeDtos=new ArrayList<>();
+        for (StudentTopic studentTopic : bySubjectTeacher) {
+            TopicForTeacherResponseDto dto=new TopicForTeacherResponseDto();
+            dto.setTopicId(studentTopic.getId());
+            dto.setTeacherId(studentTopic.getTeacherId());
+            dto.setTopic(studentTopic.getTopic());
+            dto.setResponseDto(SubjectAndStudentMapper.selectingFromEntityselectYourSubject(studentTopic.getStudentAndSubject()));
+            responeDtos.add(dto);
+        }
+        return responeDtos;
     }
 
     private TeacherForStudentsResponseDto forStudents(Teachers teachers){

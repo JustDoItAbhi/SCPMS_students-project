@@ -13,7 +13,6 @@ import userService.registrations.entities.BaseModels;
 public class StudentTopic extends BaseModels {
     private long teacherId;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "studentand_subject_id")
     private StudentAndSubject studentAndSubject;
     private String topic;
 }

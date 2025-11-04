@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { GetAllTeachersBySubjectName, GetSubjectAndStudentAllDetailsById, WriteTopic } from "../apis";
 import { Button, Card, Spin, Alert, Typography, Space, Divider, Modal, Input, Form, message } from "antd";
 import { ReloadOutlined, UserOutlined, BookOutlined, MailOutlined, IdcardOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -14,6 +15,7 @@ function StudentTopic() {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedTeacher, setSelectedTeacher] = useState(null);
     const [form] = Form.useForm();
+   const navigator= useNavigate();
 
     const subject = localStorage.getItem("subject");
     const studentId = localStorage.getItem("studentId");
@@ -75,6 +77,7 @@ function StudentTopic() {
             message.success("Topic submitted successfully!");
             setModalVisible(false);
             form.resetFields();
+            navigator("/USER-PROFILE")
         } catch (err) {
             console.error("Submission error:", err);
             
@@ -121,7 +124,7 @@ function StudentTopic() {
     }
 
     return (
-        <div style={{ padding: "24px", maxWidth: "1000px", margin: "0 auto" }}>
+        <div style={{ padding: "24px", maxWidth: "1000px", margin: "0 auto"}}>
             <Space direction="vertical" size="large" style={{ width: "100%" }}>
                 <div style={{ textAlign: "center", marginBottom: "32px" }}>
                     <Title level={2} style={{ color: "#1890ff", margin: 0 }}>
@@ -151,7 +154,7 @@ function StudentTopic() {
                             hoverable
                             style={{ 
                                 borderRadius: "12px",
-                                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                                boxShadow: "0 4px 12px rgba(161, 50, 50, 0.1)",
                                 transition: "all 0.3s ease",
                                 cursor: "pointer"
                             }}

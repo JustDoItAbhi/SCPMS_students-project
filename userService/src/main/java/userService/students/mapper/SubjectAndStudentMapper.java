@@ -21,4 +21,5 @@ public class SubjectAndStudentMapper {
         dto.setSubject(studentAndSubject);
         return dto;
     }
+
 }

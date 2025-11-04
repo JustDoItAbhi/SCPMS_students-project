@@ -3,7 +3,7 @@ package userService.students.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import userService.registrations.dtos.reponseDtos.UserResponseDto;
+import userService.students.modals.StudentAndSubject;
 import userService.students.service.StudentsService;
 import userService.students.stDto.*;
 
@@ -39,10 +39,17 @@ public class StudentsController {
     @GetMapping("/getStudentSubjectDetails/{userId}")
     public ResponseEntity<SelectSubjectAndStudentDetailsResponseDto> getSubjectAndStudentDetails(
             @PathVariable("userId")long userId){
-        return ResponseEntity.ok(studentsService.getSubjectandStudentById(userId));
+        return ResponseEntity.ok(studentsService.getSubjectandStudentByUserId(userId));
     }
     @DeleteMapping("/deleteFullUser/{userId}")
     public ResponseEntity<Boolean> deletefullUser(@PathVariable("userId")long userId){
         return ResponseEntity.ok(studentsService.deleteFullUserById(userId));
     }
+
+//    @GetMapping("/getStudentSubjectDetails/{studentAndSubjectId}")
+//    public ResponseEntity<StudentAndSubject> getSubjectAndStudentById(
+//            @PathVariable("studentAndSubjectId")long studentAndSubjectId){
+//        return ResponseEntity.ok(studentsService.getStudentAndSubjectByiD(studentAndSubjectId));
+//    }
+
 }

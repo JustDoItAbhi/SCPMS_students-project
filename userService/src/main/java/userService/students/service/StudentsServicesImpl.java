@@ -149,7 +149,7 @@ public class StudentsServicesImpl implements StudentsService{
 
 
     @Override
-    public SelectSubjectAndStudentDetailsResponseDto getSubjectandStudentById(long userId) {
+    public SelectSubjectAndStudentDetailsResponseDto getSubjectandStudentByUserId(long userId) {
         Optional<StudentAndSubject>subjectsandSubject=studentSubjectRepo.findByUserId(userId);
         if(subjectsandSubject.isEmpty()){
             throw new UserExceptions("NO SUCH SUBJECT EXSISTS "+userId);
@@ -169,6 +169,15 @@ public class StudentsServicesImpl implements StudentsService{
         // Finally delete user
         userRepository.deleteById(userId);
         return null;
+    }
+
+    @Override
+    public StudentAndSubject getStudentAndSubjectByiD(long studentAndSubjectId) {
+        Optional<StudentAndSubject>subject=studentSubjectRepo.findById(studentAndSubjectId);
+        if(subject.isEmpty()){
+            throw new UserExceptions("STUDENT AND SUBJECT ENTITY CANNOT FIND BY THIS ID "+studentAndSubjectId);
+        }
+        return subject.get();
     }
 
 

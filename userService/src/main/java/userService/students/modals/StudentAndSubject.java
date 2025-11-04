@@ -11,8 +11,8 @@ import userService.registrations.entities.BaseModels;
 @Setter
 @Entity
 public class StudentAndSubject extends BaseModels {
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-
+//    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+@OneToOne
     private Students students;
     private String Subject;
     private String subjectYear;

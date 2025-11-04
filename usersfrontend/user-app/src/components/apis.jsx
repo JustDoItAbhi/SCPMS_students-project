@@ -46,6 +46,17 @@ export const getTeacherByID=async(userId,teacherData)=>{
         throw err;
     }
 }
+export const DeleteTeacherByID=async(userId)=>{
+
+    try {
+        const teacherDelete = await axiosInstance.delete(`/api/teachers/deleteTeacher/${userId}`);
+        console.log("✅ teacher deteted success:", teacherDelete.data);
+        return teacherDelete.data;
+    } catch (err) {
+        console.log("❌ Teacher delete from api error:", err.message);
+        throw err;
+    }
+}
 
 export const getStudentByID=async(userId,studentData)=>{
 
@@ -219,29 +230,6 @@ export const registerSubjects = async (id, year, subjects) => {
         console.log(err.message);
     }
 }
-//  export const WriteTopic=async(values)=>{
-//       try {
-//         // Get student info from localStorage
-//         const studentId = localStorage.getItem("studentId");
-//         const studentandSubjectId = localStorage.getItem("studentandSubjectId"); // You might need to store this
-        
-//         // Construct request body matching the backend DTO
-//         const requestBody = {
-//             teacherId: values.teacherId, // Backend expects teacherId, not teacherEmail
-//             studentandSubjectId: studentandSubjectId || values.studentandSubjectId, // This is required
-//             topic: values.topic
-//         };
-
-//         console.log("Sending topic request:", requestBody);
-
-//         const response = await axiosInstance.post(`/api/students/writeTopic`, values);
-//         console.log("Topic submitted successfully:", response.data);
-//         return response.data;
-//     } catch (err) {
-//         console.error("Error submitting topic:", err.response?.data || err.message);
-//         throw err;
-//     }
-// }
 
  export const WriteTopic=async(values)=>{
       try {

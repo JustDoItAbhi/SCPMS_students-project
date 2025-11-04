@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetSubjectAndStudentAllDetailsById } from "../apis";
-import "./Profile.css"; // Create this CSS file
+import "./Profile.css";
 
 function Profile() {
     const [user, setUser] = useState(null);
@@ -22,6 +22,14 @@ function Profile() {
         }
     }
 
+    const handleLogout = () => {
+        // Clear localStorage
+        localStorage.removeItem("userId");
+        localStorage.removeItem("token");
+        // Redirect to login page or home page
+        window.location.href = "/login"; // Adjust the path as needed
+    }
+
     useEffect(() => {
         getAllUserDetails();
     }, []);
@@ -38,6 +46,9 @@ function Profile() {
         return (
             <div className="profile-container">
                 <div className="error-message">Failed to load user data</div>
+                <button className="logout-btn" onClick={handleLogout}>
+                    Logout
+                </button>
             </div>
         );
     }
@@ -48,7 +59,12 @@ function Profile() {
         <div className="profile-container">
             <div className="profile-header">
                 <h1 className="profile-title">Student Profile</h1>
-                <div className="profile-badge">{userRole}</div>
+                <div className="header-actions">
+                    <div className="profile-badge">{userRole}</div>
+                    <button className="logout-btn" onClick={handleLogout}>
+                        Logout
+                    </button>
+                </div>
             </div>
 
             <div className="profile-content">
@@ -121,6 +137,10 @@ function Profile() {
                         <div className="info-item">
                             <label>Enrollment ID</label>
                             <span className="info-value">{user.studentAndSubjectId}</span>
+                        </div>
+                        <div className="info-item">
+                            <label>Subject ID</label>
+                            <span className="info-value">{user.subject.id}</span>
                         </div>
                     </div>
                 </div>

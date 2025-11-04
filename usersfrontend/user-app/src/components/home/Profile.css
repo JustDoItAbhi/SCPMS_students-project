@@ -17,6 +17,12 @@
     border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .profile-title {
     color: #fff;
     font-size: 2.5rem;
@@ -36,6 +42,26 @@
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+.logout-btn {
+    background: linear-gradient(135deg, #ff4757, #ff3742);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, #ff3742, #ff2e3b);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
 }
 
 .profile-content {
@@ -164,6 +190,11 @@
         text-align: center;
     }
     
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
     .profile-title {
         font-size: 2rem;
     }
@@ -188,5 +219,10 @@
     
     .info-value {
         font-size: 1rem;
+    }
+    
+    .logout-btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
     }
 }
