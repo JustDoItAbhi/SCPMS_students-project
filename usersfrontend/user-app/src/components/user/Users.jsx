@@ -96,7 +96,7 @@ const deleteUser = async (userId) => {
 
   return (
     <div style={{ position: "relative", zIndex: 10, color: "black", padding: "20px" }}>
-      <h1>ADMIN PANEL - ALL USERS</h1>
+      <h1>ADMIN PANEL - ALL STUDENTS PANNEL</h1>
       
       <div style={{ 
         background: "rgba(0,0,0,0.3)", 

@@ -1,5 +1,6 @@
 package userService.teachers.modal;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
@@ -12,6 +13,10 @@ import userService.registrations.entities.Users;
 @Entity
 public class Teachers extends BaseModels {
     @OneToOne
+            (cascade = CascadeType.ALL,orphanRemoval = true)
     private Users users;
+    private String teacherName;
     private String subject;
+    private String teacherYear;
+    private String userEmail;
 }

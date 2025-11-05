@@ -108,30 +108,38 @@ public class StudentsServicesImpl implements StudentsService{
 
     @Override
     public TopicResponeDto submitTopic(TopicRequestDto dto) {
-        Optional<Teachers>exsitingTeacher=teacherRepository.findById(dto.getTeacherId());
+        Optional<Teachers> exsitingTeacher = teacherRepository.findById(dto.getTeacherId());
         if(exsitingTeacher.isEmpty()){
             throw new UserExceptions("PLEASE CHOOSE A VALID TEACHER FOR SUBJECT TOPIC "+ dto.getTeacherId());
         }
-        Optional<StudentAndSubject>studentAndSubject=studentSubjectRepo.findById(dto.getStudentandSubjectId());
+
+        Optional<StudentAndSubject> studentAndSubject = studentSubjectRepo.findById(dto.getStudentandSubjectId());
         if(studentAndSubject.isEmpty()){
-            throw new UserExceptions("THIS SUBJECT NOT EXSITS  "+dto.getStudentandSubjectId());
+            throw new UserExceptions("THIS SUBJECT NOT EXISTS  "+dto.getStudentandSubjectId());
         }
-        List<Teachers>teachersList=teacherRepository.findBySubject(studentAndSubject.get().getSubject());
+
+        // Debug: Check if studentAndSubject is properly retrieved
+        System.out.println("Found StudentAndSubject: " + studentAndSubject.get().getId());
+
+        List<Teachers> teachersList = teacherRepository.findBySubject(studentAndSubject.get().getSubject());
         if(teachersList.isEmpty()){
-            throw new UserExceptions("TEACHER NOT ASSINGED TO THIS SUBJECT YET PLEASE REQUEST TEACHER "+dto.getTeacherId());
+            throw new UserExceptions("TEACHER NOT ASSIGNED TO THIS SUBJECT YET:: PLEASE REQUEST TEACHER "+dto.getTeacherId());
         }
-        StudentTopic topic=new StudentTopic();
+
+        StudentTopic topic = new StudentTopic();
         topic.setTeacherId(dto.getTeacherId());
-        Optional<StudentAndSubject>subject=studentSubjectRepo.findById(dto.getStudentandSubjectId());
-        if(subject.isEmpty()){
-            throw new UserExceptions("INVALID STUDENT ID "+dto.getStudentandSubjectId());
-        }
-        topic.setStudentAndSubject(subject.get());
+
+        // You already checked this above, no need to query again
+        topic.setStudentAndSubject(studentAndSubject.get());
         topic.setTopic(dto.getTopic());
+
+        // Debug before save
+        System.out.println("Topic studentAndSubject: " + topic.getStudentAndSubject());
+        System.out.println("Topic studentAndSubject ID: " + (topic.getStudentAndSubject() != null ? topic.getStudentAndSubject().getId() : "NULL"));
+
         studentTopicRepo.save(topic);
         return SubjectAndStudentMapper.fromTopicEntity(topic);
     }
-
     @Override
     public StudentsResponseDto getStudentById(long id) {
         Optional<Users>existingUser=userRepository.findById(id);

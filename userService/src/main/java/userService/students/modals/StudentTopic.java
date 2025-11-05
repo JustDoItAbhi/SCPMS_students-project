@@ -12,7 +12,8 @@ import userService.registrations.entities.BaseModels;
 @Entity
 public class StudentTopic extends BaseModels {
     private long teacherId;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(optional = false) // This makes the relationship mandatory
+    @JoinColumn(name = "studentand_subject_id", nullable = false)
     private StudentAndSubject studentAndSubject;
     private String topic;
 }

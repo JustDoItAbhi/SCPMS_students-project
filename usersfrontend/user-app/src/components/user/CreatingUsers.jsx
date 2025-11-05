@@ -33,7 +33,7 @@ const navigate=useNavigate();
     }
 
     return (
-        <div style={{height:"100vh", background:"content-box radial-gradient(rgba(173, 153, 157, 1), rgba(110, 114, 119, 1))"}}>
+        <div style={{height:"100vh", background:"content-box radial-gradient(rgba(173, 153, 157, 1), rgba(40, 41, 42, 1))"}}>
             <Form
                 form={basicForm} 
                 name="basic"

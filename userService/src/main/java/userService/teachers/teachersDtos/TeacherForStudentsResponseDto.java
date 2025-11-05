@@ -9,5 +9,4 @@ public class TeacherForStudentsResponseDto {
     private String subject;
     private String teacherEmail;
     private long teacherId;
-
 }

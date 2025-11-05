@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface StudentTopicRepo extends JpaRepository<StudentTopic,Long> {
 List<StudentTopic>findByTeacherId(long teacherId);
+
 }

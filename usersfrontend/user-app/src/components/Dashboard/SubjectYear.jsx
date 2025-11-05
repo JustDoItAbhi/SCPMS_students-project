@@ -9,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 const SubjectYear = () => {
-const navigator= useNavigate();
+const navigate= useNavigate();
 
     const [selectedYear, setSelectedYear] = useState('');
     const [subjects, setSubjects] = useState([]);
@@ -17,6 +17,10 @@ const navigator= useNavigate();
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ type: '', content: '' });
     const [chhoseSeubject, setChoosenSubject] = useState('');
+       const studentSubjectId = localStorage.getItem('studentAndSubjectId') 
+          if(studentSubjectId){
+            navigate("/TOPIC-SELECTION")
+            }
 
     const years = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
 
@@ -24,8 +28,9 @@ const navigator= useNavigate();
     const fetchSubjectsByYear = async (year) => {
         setLoading(true);
         setMessage({ type: '', content: '' });
+ 
         try {
-            
+      
             const response = await GetSubjectByYear(year);
             setSubjects(response.subjectsList || []);
             setSelectedSubjects([]); // Reset selections when year changes
@@ -73,7 +78,7 @@ const navigator= useNavigate();
             console.log("SUBJECT REGISTERED ",selectedSubjects?.subject)
             setChoosenSubject(selectedSubjects);
 
-            navigator("/TOPIC-SELECTION")
+            navigate("/TOPIC-SELECTION")
             return;
         }
 
@@ -83,6 +88,7 @@ const navigator= useNavigate();
             
         const registerSubject=  await registerSubjects(studentId, selectedYear,selectedSubjects);
           console.log("RESPONSE FROM SUBJECT ",registerSubject.subject)
+          localStorage.setItem("studentAndSubjectId",registerSubject.subject)
 
             setMessage({ 
                 type: 'success', 

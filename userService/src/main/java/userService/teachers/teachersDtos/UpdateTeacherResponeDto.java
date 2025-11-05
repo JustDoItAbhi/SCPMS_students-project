@@ -6,12 +6,11 @@ import userService.registrations.entities.Users;
 
 @Getter
 @Setter
-public class TeacherResponseDto {
+public class UpdateTeacherResponeDto {
     private long teacherId;
     private String teacherName;
-    private String teacherYear;
     private String subject;
-    private String teacherEmail;
     private Users users;
-
+    private String teacherEmail;
+    private String teacherYear;
 }

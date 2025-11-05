@@ -22,6 +22,8 @@ import SubjectYear from '../Dashboard/SubjectYear';
 import RegisterToSubject from '../Dashboard/RegisterToSubject';
 import Profile from '../home/Profile';
 import StudentTopic from '../Dashboard/StudentTopic';
+import TeacherProfile from '../teachers/TeacherProfile';
+import StudentRequests from '../teachers/StudentRequests';
 
 
 function AppContent() {
@@ -56,6 +58,8 @@ function AppContent() {
         <Route path='/REGISTER-SUBJECT' element={<RegisterToSubject/>}/>
         <Route path='/USER-PROFILE' element={<Profile/>}/>
         <Route path='/TOPIC-SELECTION' element={<StudentTopic/>}/>
+        <Route path="/TEACHER-PROFILE" element={<TeacherProfile />} />
+        <Route path="/TEACHER-APROVEL" element={<StudentRequests />} />
         
 
         <Route

@@ -2,7 +2,12 @@ import "./HomeCss.css"
 import { useNavigate } from "react-router-dom"
 function HomePage() {
     const navigate = useNavigate();
-
+    localStorage.removeItem("access_token")
+    localStorage.removeItem("studentId")
+    localStorage.removeItem("subject")
+    localStorage.removeItem("user")
+    localStorage.removeItem("userId")
+    localStorage.removeItem("studentAndSubjectId")
     const handleClick = () => {
         navigate("/Login")
     }
@@ -47,23 +52,23 @@ function HomePage() {
                     <li>Automated Notifications – Students receive instant email updates for submission, approval, or rejection statuses.</li>
                     <li>Record Keeping & Transparency – Maintains a history of approved and rejected topics for reporting and accountability.</li>
                 </ul>
-                  <video
+                <video
                     className="videointro"
                     src="/v1.mp4"
                     autoPlay
                     muted
                     loop
                     playsInline
-                ></video> 
-                <br/>
+                ></video>
+                <br />
                 <div>
                     <p>
-                        Our Student Conference Participation Management System (SCPMS) makes conference participation effortless and rewarding. Students can easily submit topics, 
-                    track approvals, and receive instant notifications - all in one secure platform. Teachers can quickly review and approve submissions, ensuring a smooth workflow.
-                    With transparent record-keeping and role-based access, SCPMS promotes fairness, accountability, and active academic engagement. By simplifying the entire process, 
-                    we help students focus on learning and presenting their ideas, making conference participation more organized, efficient, and impactful for everyone.
+                        Our Student Conference Participation Management System (SCPMS) makes conference participation effortless and rewarding. Students can easily submit topics,
+                        track approvals, and receive instant notifications - all in one secure platform. Teachers can quickly review and approve submissions, ensuring a smooth workflow.
+                        With transparent record-keeping and role-based access, SCPMS promotes fairness, accountability, and active academic engagement. By simplifying the entire process,
+                        we help students focus on learning and presenting their ideas, making conference participation more organized, efficient, and impactful for everyone.
                     </p>
-                    
+
                 </div>
             </div>
             <footer className="contacts">

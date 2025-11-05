@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Card, List, Button, Typography, Alert, Spin, Form, Input, message } from 'antd';
 import { BookOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
-import { DeleteTeacherByID, DeleteUser, GetSubjectByYear, getTeacherByID } from "../apis";
+import { DeleteTeacherByID, DeleteUser, FinishTeacherSignUp, GetSubjectByYear, GetTeacherByidss} from "../apis";
 import './TeachersSignup.css';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
@@ -15,22 +16,28 @@ function TeachersSignup() {
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const userId = localStorage.getItem("userId");
+    const teacherId= localStorage.getItem("teacherId")
+  const navigate=  useNavigate();
 
     const years = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
-    
-    // Mock subjects data - you can replace this with actual API call
-    const yearSubjects = {
-        '1st': ['ANATOMY', 'PHYSIOLOGY', 'BIOCHEMISTRY', 'BASIC MEDICAL SCIENCES'],
-        '2nd': ['PATHOLOGY', 'PHARMACOLOGY', 'MICROBIOLOGY', 'FORENSIC MEDICINE'],
-        '3rd': ['MEDICINE', 'SURGERY', 'PEDIATRICS', 'OBSTETRICS & GYNECOLOGY'],
-        '4th': ['PSYCHIATRY', 'DERMATOLOGY', 'OPHTHALMOLOGY', 'ENT'],
-        '5th': ['ORTHOPEDICS', 'RADIOLOGY', 'ANESTHESIOLOGY', 'COMMUNITY MEDICINE'],
-        '6th': ['INTERNAL MEDICINE', 'GENERAL SURGERY', 'PEDIATRIC MEDICINE', 'EMERGENCY MEDICINE'],
-        '7th': ['MEDICAL SPECIALTIES', 'SURGICAL SPECIALTIES', 'RESEARCH METHODOLOGY', 'CLINICAL ELECTIVES']
+    const fetchTeacherData = async () => {
+        try {
+            if (userId) {
+                console.log("✅ Ready to complete teacher signup for user:", userId);
+               const teachers=await GetTeacherByidss(teacherId);
+               if(!teacher){
+        navigate("/TEACHER-PROFILE");
+            }
+               console.log("TEACHER DATA BY ID ",teachers);
+
+            }
+        } catch (err) {
+            console.log("❌ Error fetching teacher data:", err.message);
+        }
     };
 
-// Replace the mock yearSubjects and fetchSubjectsByYear function with:
 const fetchSubjectsByYear = async (year) => {
+ 
     setLoading(true);
     setSelectedYear(year);
     setSelectedSubject('');
@@ -50,20 +57,19 @@ const fetchSubjectsByYear = async (year) => {
 
 const deleteTeacher=async()=>{
     try{
-          const deleteFullUser=await DeleteUser(userId);
-             console.log("USER DELTED",deleteFullUser);
-             if(deleteFullUser){
-                localStorage.removeItem("userId");
-             }
-        const response =await DeleteTeacherByID(userId);
+        const response =await DeleteTeacherByID(teacherId);
         console.log(response);
         if(!response){
-          
+          console.log("UNABLE TO DELETE")
         }
     }catch(err){
         console.log(err.message);
     }
 }
+
+
+
+
     // Handle subject selection
     const handleSubjectSelect = (subject) => {
         setSelectedSubject(subject);
@@ -87,14 +93,26 @@ localStorage.setItem('teacherSubject', subject);
                 messageApi.warning("Please select a subject to teach");
                 return;
             }
-
+            if(teacherId){
+                 try {
+                console.log("✅ Ready to complete teacher signup for user:", userId);
+               const teachers=await GetTeacherByidss(teacherId);
+               console.log("TEACHER DATA BY ID ",teachers);
+        } catch (err) {
+            console.log("❌ Error fetching teacher data:", err.message);
+        }
+    }else{
+            }
             setLoading(true);
             const subject=localStorage.getItem("teacherSubject")
-            const response = await getTeacherByID(userId,subject);
+            const response = await FinishTeacherSignUp(userId,subject);
             console.log("teacher added ", response);
             
             if (response) {
                 console.log("✅ TEACHER SIGNUP COMPLETED:", response.data);
+
+            
+
                 setTeacher(response.data);
                 messageApi.success("Teacher profile completed successfully!");
                 
@@ -102,6 +120,7 @@ localStorage.setItem('teacherSubject', subject);
                 localStorage.setItem('teacher', JSON.stringify(response.data));
                 
             }
+                       
         } catch (err) {
             console.log("❌ Error completing teacher signup:", err.message);
             messageApi.error("Failed to complete teacher signup");
@@ -111,16 +130,7 @@ localStorage.setItem('teacherSubject', subject);
     };
 
     // Fetch existing teacher data
-    const fetchTeacherData = async () => {
-        try {
-            if (userId) {
-                console.log("✅ Ready to complete teacher signup for user:", userId);
-                // You can add API call here to check if teacher already exists
-            }
-        } catch (err) {
-            console.log("❌ Error fetching teacher data:", err.message);
-        }
-    };
+
 
     useEffect(() => {
         if (userId) {
@@ -140,7 +150,7 @@ localStorage.setItem('teacherSubject', subject);
                 </Title>
                 <Button 
                 onClick={deleteTeacher}>
-                    DELETE PROFILE
+                    DELETE ACCOUNT
                 </Button>
                 <Text className="subtitle">
                     Select your teaching year and subject to complete your profile

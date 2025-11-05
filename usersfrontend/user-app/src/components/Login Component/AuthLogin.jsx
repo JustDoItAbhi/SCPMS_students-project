@@ -2,7 +2,7 @@ import { useId, useState } from "react";
 import { useAuth } from "./UseAuth";
 import { useNavigate } from "react-router-dom";
 import "./AuthLoginCss.css"
-import { GetUserById } from "../apis";
+import { GetTeacherByUserEmail, GetUserById } from "../apis";
 
 const AuthLogin = () => {
     const [formData, setFormData] = useState({
@@ -13,6 +13,12 @@ const AuthLogin = () => {
     const [loading, setLoading] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
+    //     localStorage.removeItem("access_token")
+    // localStorage.removeItem("studentId")
+    // localStorage.removeItem("subject")
+    // localStorage.removeItem("user")
+    // localStorage.removeItem("userId")
+    // localStorage.removeItem("studentAndSubjectId")
 
     const handleChange = (e) => {
         setFormData({
@@ -60,7 +66,15 @@ const AuthLogin = () => {
                         if (userRole === "STUDENT") {
                             navigate("/STUDENTSIGNUP")
                         } else if (userRole === "TEACHER") {
-                            navigate("/TEACHERSIGNUP")
+                            const userEmail=localStorage.getItem("userEmail");
+                            const getteacherbyemail=await GetTeacherByUserEmail(userEmail);
+                            if(getteacherbyemail){
+                localStorage.setItem("teacherId",getteacherbyemail)
+                                console.log(getteacherbyemail);
+
+                              navigate("/TEACHERSIGNUP")
+                            }
+          
                         }
                     }
 

@@ -35,10 +35,10 @@ export const CreateUser = async (values) => {
         throw err;
     }
 }
-export const getTeacherByID=async(userId,teacherData)=>{
+export const FinishTeacherSignUp=async(userId,subject)=>{
 
     try {
-        const teacherSignup = await axiosInstance.post(`/api/teachers/finishSignUP/${userId}`, {user:teacherData});
+        const teacherSignup = await axiosInstance.post(`/api/teachers/finishSignUP/${userId}/${subject}`);
         console.log("✅ CompleteTeacherSignup success:", teacherSignup);
         return teacherSignup;
     } catch (err) {
@@ -46,6 +46,42 @@ export const getTeacherByID=async(userId,teacherData)=>{
         throw err;
     }
 }
+
+export const GetTeacherByidss=async(teacherId)=>{
+
+    try {
+        const teacher= await axiosInstance.get(`/api/teachers/getTeacherById/${teacherId}`);
+        console.log("✅ CompleteTeacherSignup success:", teacher.data);
+        return teacher.data;
+    } catch (err) {
+        console.log("❌ CompleteTeacherSignup error:", err.message);
+        throw err;
+    }
+}
+
+export const GetAllTheStdListForTeacher =async(teacherId)=>{
+    try {
+        const teacher= await axiosInstance.get(`/api/teachers/allTopicsByTeacherId/${teacherId}`);
+        console.log("✅ LIST OF STUDNETS:", teacher.data);
+        return teacher.data;
+    } catch (err) {
+        console.log("❌ LIST OF STUDNETS error:", err.message);
+        throw err;
+    }
+}
+export const GetTeacherByUserEmail =async(userEmail)=>{
+    try {
+        const teacher= await axiosInstance.get(`/api/teachers/getTeacherByUserEmail/${userEmail}`);
+        console.log("✅ TEACHER BY USER EMAIL:", teacher.data);
+        return teacher.data;
+    } catch (err) {
+        console.log("❌ TEACHER BY USER EMAIL error:", err.message);
+        throw err;
+    }
+}
+
+
+
 export const DeleteTeacherByID=async(userId)=>{
 
     try {
@@ -104,6 +140,8 @@ export const GetUserById=async(id)=>{
     try{
         const response=await axiosInstance.get(`/api/user/getUserById/${id}`);
         console.log(" USERS BY ID",response.data)
+        console.log("user email",response.data.email);
+        localStorage.setItem("userEmail",response.data.email);
         return response
     }catch(err){
         console.log(err.message);

@@ -12,13 +12,12 @@ import userService.students.stDto.SelectSubjectAndStudentDetailsResponseDto;
 import userService.students.stDto.TopicResponeDto;
 import userService.students.studentRepo.StudentTopicRepo;
 import userService.students.studentRepo.StudentsRepository;
+import userService.subjects.Subjects;
+import userService.subjects.repo.SubjectRepository;
 import userService.teachers.TeacherMapper;
 import userService.teachers.modal.Teachers;
 import userService.teachers.repos.TeacherRepository;
-import userService.teachers.teachersDtos.TeacherForStudentsResponseDto;
-import userService.teachers.teachersDtos.TeacherRequestDto;
-import userService.teachers.teachersDtos.TeacherResponseDto;
-import userService.teachers.teachersDtos.TopicForTeacherResponseDto;
+import userService.teachers.teachersDtos.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +33,20 @@ public class TeachersServiceImpl implements TeacherService{
     private TeacherRepository teacherRepository;
     @Autowired
     private StudentTopicRepo studentTopicRepo;
+    @Autowired
+    private SubjectRepository subjectRepository;
     @Override
-    public TeacherResponseDto completeSignup(long id, TeacherRequestDto dto) {
-        Optional<Users> existingUsers=userRepository.findById(id);
+    public TeacherResponseDto completeSignup(long userid, String subject) {
+        System.out.println("SUBJECT FROM DTO "+subject);
+        Optional<Users> existingUsers=userRepository.findById(userid);
         if(existingUsers.isEmpty()){
-            throw new UserExceptions("USER NOT EXISTS "+id);
+            throw new UserExceptions("USER NOT EXISTS "+userid);
         }
         Users users= existingUsers.get();
+        Optional<Teachers>findByTeacherEmail=teacherRepository.findByUserEmail(existingUsers.get().getEmail());
+        if(findByTeacherEmail.isPresent()){
+            throw new UserExceptions("YOU ARE NOT ALLOWED TO ENROL FOR ANOTHOR SUBJECT "+existingUsers.get().getEmail());
+        }
         boolean isTeacher=users.getRolesList().stream()
                 .anyMatch(roles -> roles.getRoleName().equalsIgnoreCase("TEACHER"));
         boolean isAdmin=users.getRolesList().stream()
@@ -49,10 +55,18 @@ public class TeachersServiceImpl implements TeacherService{
             throw new UserExceptions("YOU ARE NOT A STUDENT NIGTHER A TEACHER SO NOT ALLOW FOR THIS REQUEST ");
         }
         Teachers teachers=new Teachers();
-        teachers.setSubject(dto.getTeacherSubject());
+        Optional<Subjects>subjects=subjectRepository.findBySubject(subject);
+        if(subjects.isEmpty()){
+            throw new UserExceptions("SUBJECT IS NOT AVAILABLE PLEASE TRY ANOTHER SUBJECT "+subject);
+        }
+        System.out.println("SUBJECT ----------"+subjects.get().getSubject()+" YEAR "+subjects.get().getCourseYear());
+        teachers.setSubject(subjects.get().getSubject());
+        teachers.setTeacherYear(subjects.get().getCourseYear());
         teachers.setUsers(existingUsers.get());
+        teachers.setTeacherName(existingUsers.get().getName());
+        teachers.setUserEmail(existingUsers.get().getEmail());
         teacherRepository.save(teachers);
-        return fromTeacherEntity(teachers);
+        return TeacherMapper.fromTeacherEntity(teachers);
     }
 
     @Override
@@ -64,6 +78,10 @@ public class TeachersServiceImpl implements TeacherService{
         }
         if(bySubjectTeacher.isEmpty()){
             throw new UserExceptions("NO TEACHER SELECTED THIS TOPIC YET PLEASE TRY AGAIN LATER "+subject);
+        }
+        Optional<Subjects>subjects=subjectRepository.findBySubject(subject);
+        if(subjects.isEmpty()){
+            throw new UserExceptions("SUBJECT IS NOT AVAILABLE PLEASE TRY ANOTHER SUBJECT "+subject);
         }
         List<TeacherForStudentsResponseDto>responseDtos=new ArrayList<>();
         for(Teachers teachers:bySubjectTeacher){
@@ -103,6 +121,60 @@ public class TeachersServiceImpl implements TeacherService{
         return responeDtos;
     }
 
+    @Override
+    public UpdateTeacherResponeDto updateTeacher(long id,long userId, TeacherRequestDto dto) {
+        Optional<Teachers>exsitingTeacher=teacherRepository.findById(id);
+        if(exsitingTeacher.isEmpty()){
+            throw new UserExceptions("TEACHER ID NOT FOUND");
+        }
+        Teachers teachers=exsitingTeacher.get();
+        Optional<Users>exsitingUser=userRepository.findById(userId);
+        if(exsitingUser.isEmpty()){
+            throw new UserExceptions("USER ID UNDEFINED "+userId);
+        }teachers.setUsers(exsitingUser.get());
+        Optional<Subjects>subjects=subjectRepository.findBySubject(dto.getTeacherSubject());
+        if(subjects.isEmpty()){
+            throw new UserExceptions("PLEASE CHECK THE SUBJECT AGAIN ");
+        }
+        Subjects subject=subjects.get();
+        System.out.println("SUBJECT ----------"+subject.getSubject()+" YEAR "+subject.getCourseYear());
+        teachers.setSubject(subject.getSubject());
+        teachers.setTeacherYear(subject.getCourseYear());
+        teachers.setUserEmail(exsitingUser.get().getEmail());
+        teachers.setTeacherName(exsitingUser.get().getName());
+        teacherRepository.save(teachers);
+        return TeacherMapper.updateMapper(teachers);
+    }
+
+    @Override
+    public List<ListOfTechersResponseDto> getListOfTeacher() {
+        List<Teachers>teachersList=teacherRepository.findAll();
+        List<ListOfTechersResponseDto>responseDtoList=new ArrayList<>();
+        for(Teachers teachers:teachersList){
+            responseDtoList.add(TeacherMapper.getListFromEntity(teachers));
+        }
+        return responseDtoList;
+    }
+
+    @Override
+    public TeacherResponseDto getTeacherById(long id) {
+        Optional<Teachers>teachersOptional=teacherRepository.findById(id);
+        if(teachersOptional.isEmpty()){
+            throw new UserExceptions("THIS TEACHER IS SAVED IN DATABASE "+id);
+        }
+        return TeacherMapper.fromTeacherEntity(teachersOptional.get());
+    }
+
+    @Override
+    public long getTeacherByUserEmail(String userEmail) {
+        Optional<Teachers>byEmail=teacherRepository.findByUserEmail(userEmail);
+        if(byEmail.isEmpty()){
+            throw new UserExceptions("TEACHER EMAIL NOT EXSISTS");
+        }
+        long ticherId=byEmail.get().getId();
+        return ticherId;
+    }
+
     private TeacherForStudentsResponseDto forStudents(Teachers teachers){
         TeacherForStudentsResponseDto dto=new TeacherForStudentsResponseDto();
         dto.setSubject(teachers.getSubject());
@@ -111,11 +183,5 @@ public class TeachersServiceImpl implements TeacherService{
         return dto;
     }
 
-    private TeacherResponseDto fromTeacherEntity(Teachers teachers){
-        TeacherResponseDto dto=new TeacherResponseDto();
-        dto.setSubject(teachers.getSubject());
-        dto.setUsers(teachers.getUsers());
-        /// wait for aproval
-        return dto;
-    }
+
 }

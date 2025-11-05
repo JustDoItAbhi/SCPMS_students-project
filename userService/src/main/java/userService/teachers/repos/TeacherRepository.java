@@ -20,4 +20,6 @@ public interface TeacherRepository extends JpaRepository<Teachers,Long> {
 
     @Query("SELECT t FROM Teachers t WHERE LOWER(TRIM(t.subject)) LIKE LOWER(CONCAT('%', TRIM(:subject), '%'))")
     List<Teachers> findBySubjectContainingIgnoreCaseAndTrim(@Param("subject") String subject);
+
+    Optional<Teachers>findByUserEmail(String userEmail);
 }
