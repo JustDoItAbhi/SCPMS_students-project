@@ -22,17 +22,18 @@ body {
     border: solid;
     color: wheat;
     height: 100vh;
-    padding: 0 vw;
-      justify-content: center;  
-        align-items: center;   
+    padding: 20 px;
+      justify-content: flex-start;  
+        align-items: flex-start;   
           box-sizing: border-box;
 }
 .scpms{
    /* Updated for better responsiveness */
-  padding: 2vh 5vw;
+  padding: 22vh 28vw;
   color: wheat;
-  text-shadow: 0.5vh 0.5vw #030a11;
-  text-align: center;
+  margin:  10vw ;
+  text-shadow: 0.2vh 0.3vw #030a11;
+  text-align: left;
   width: 100%;
   box-sizing: border-box;
   /* Prevent text from breaking into vertical layout */

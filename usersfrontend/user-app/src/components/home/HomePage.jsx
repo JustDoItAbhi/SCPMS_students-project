@@ -7,7 +7,10 @@ function HomePage() {
     localStorage.removeItem("subject")
     localStorage.removeItem("user")
     localStorage.removeItem("userId")
+    localStorage.removeItem("teacher")   
     localStorage.removeItem("studentAndSubjectId")
+    localStorage.removeItem("teacherSubject")
+    localStorage.removeItem("userEmail")
     const handleClick = () => {
         navigate("/Login")
     }

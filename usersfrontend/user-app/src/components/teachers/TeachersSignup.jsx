@@ -110,14 +110,12 @@ localStorage.setItem('teacherSubject', subject);
             
             if (response) {
                 console.log("✅ TEACHER SIGNUP COMPLETED:", response.data);
-
-            
-
                 setTeacher(response.data);
                 messageApi.success("Teacher profile completed successfully!");
                 
                 // Store teacher info in localStorage
                 localStorage.setItem('teacher', JSON.stringify(response.data));
+                navigate("/TEACHER-PROFILE");
                 
             }
                        

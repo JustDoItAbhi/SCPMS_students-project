@@ -1,8 +1,10 @@
 import axios from "axios"
 import axiosInstance from "../auth/AuthMiddleWear"
+import { useNavigate } from "react-router-dom"
 const BASE_URL="http://localhost:8080/api/user"
 
 export const GetAllUsers = async () => {
+ const navigate=   useNavigate();
     try {
         console.log("🔍 Making GetAllUsers API call...");
         const response = await axiosInstance.get("/api/user/allUsers");
@@ -72,7 +74,7 @@ export const GetAllTheStdListForTeacher =async(teacherId)=>{
 export const GetTeacherByUserEmail =async(userEmail)=>{
     try {
         const teacher= await axiosInstance.get(`/api/teachers/getTeacherByUserEmail/${userEmail}`);
-        console.log("✅ TEACHER BY USER EMAIL:", teacher.data);
+        console.log("✅ TEACHER BY USER EMAIL:", teacher.data); 
         return teacher.data;
     } catch (err) {
         console.log("❌ TEACHER BY USER EMAIL error:", err.message);
