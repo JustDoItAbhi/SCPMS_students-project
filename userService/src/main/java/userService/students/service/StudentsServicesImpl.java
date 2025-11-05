@@ -14,18 +14,16 @@ import userService.students.mapper.SubjectAndStudentMapper;
 import userService.students.modals.StudentAndSubject;
 import userService.students.modals.StudentTopic;
 import userService.students.modals.Students;
+import userService.students.modals.enums.TOPIC_STATUS;
 import userService.students.stDto.*;
 import userService.students.studentRepo.StudentSubjectRepo;
 import userService.students.studentRepo.StudentTopicRepo;
 import userService.students.studentRepo.StudentsRepository;
 import userService.subjects.Subjects;
-import userService.subjects.dtos.SubjectResponseDto;
 import userService.subjects.repo.SubjectRepository;
 import userService.teachers.modal.Teachers;
 import userService.teachers.repos.TeacherRepository;
-//import userService.students.studentRepo.StudentsRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -129,14 +127,12 @@ public class StudentsServicesImpl implements StudentsService{
         StudentTopic topic = new StudentTopic();
         topic.setTeacherId(dto.getTeacherId());
 
-        // You already checked this above, no need to query again
         topic.setStudentAndSubject(studentAndSubject.get());
         topic.setTopic(dto.getTopic());
 
-        // Debug before save
         System.out.println("Topic studentAndSubject: " + topic.getStudentAndSubject());
         System.out.println("Topic studentAndSubject ID: " + (topic.getStudentAndSubject() != null ? topic.getStudentAndSubject().getId() : "NULL"));
-
+        topic.setTeacherAprovels(TOPIC_STATUS.WAITING);
         studentTopicRepo.save(topic);
         return SubjectAndStudentMapper.fromTopicEntity(topic);
     }
@@ -176,7 +172,7 @@ public class StudentsServicesImpl implements StudentsService{
 
         // Finally delete user
         userRepository.deleteById(userId);
-        return null;
+        return true;
     }
 
     @Override

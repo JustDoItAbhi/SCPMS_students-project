@@ -11,6 +11,7 @@ function HomePage() {
     localStorage.removeItem("studentAndSubjectId")
     localStorage.removeItem("teacherSubject")
     localStorage.removeItem("userEmail")
+    localStorage.removeItem("teacherId")
     const handleClick = () => {
         navigate("/Login")
     }

@@ -1,7 +1,5 @@
-package userService.teachers;
+package userService.teachermappers;
 
-import userService.students.modals.StudentTopic;
-import userService.students.stDto.TopicResponeDto;
 import userService.teachers.modal.Teachers;
 import userService.teachers.teachersDtos.ListOfTechersResponseDto;
 import userService.teachers.teachersDtos.TeacherResponseDto;

@@ -7,15 +7,18 @@ import userService.registrations.exceptions.UserExceptions;
 import userService.registrations.repos.RolesRepository;
 import userService.registrations.repos.UserRepository;
 import userService.students.mapper.SubjectAndStudentMapper;
+import userService.students.modals.StudentAndSubject;
 import userService.students.modals.StudentTopic;
-import userService.students.stDto.SelectSubjectAndStudentDetailsResponseDto;
-import userService.students.stDto.TopicResponeDto;
+import userService.students.modals.enums.TOPIC_STATUS;
+import userService.students.studentRepo.StudentSubjectRepo;
 import userService.students.studentRepo.StudentTopicRepo;
-import userService.students.studentRepo.StudentsRepository;
 import userService.subjects.Subjects;
 import userService.subjects.repo.SubjectRepository;
-import userService.teachers.TeacherMapper;
+import userService.teachermappers.TeacherAndTopicMapper;
+import userService.teachermappers.TeacherMapper;
+import userService.teachers.modal.TeacherAndTopics;
 import userService.teachers.modal.Teachers;
+import userService.teachers.repos.TeacherAndTopicsRepository;
 import userService.teachers.repos.TeacherRepository;
 import userService.teachers.teachersDtos.*;
 
@@ -35,6 +38,11 @@ public class TeachersServiceImpl implements TeacherService{
     private StudentTopicRepo studentTopicRepo;
     @Autowired
     private SubjectRepository subjectRepository;
+    @Autowired
+    private TeacherAndTopicsRepository teacherAndTopicsRepository;
+    @Autowired
+    private StudentSubjectRepo studentSubjectRepo;
+
     @Override
     public TeacherResponseDto completeSignup(long userid, String subject) {
         System.out.println("SUBJECT FROM DTO "+subject);
@@ -173,6 +181,44 @@ public class TeachersServiceImpl implements TeacherService{
         }
         long ticherId=byEmail.get().getId();
         return ticherId;
+    }
+
+    @Override
+    public TeacherTopicResponseDto saveTopicwhichIsApproved(TeacherTopicRequestDto dto) {
+        Optional<StudentTopic>studentTopic=studentTopicRepo.findById(dto.getTopicId());
+        if(studentTopic.isEmpty()){
+            throw new UserExceptions("NO SUCH TOPIC AVAILABLE "+dto.getTopic());
+        }
+        StudentTopic studentTopic1=studentTopic.get();
+        Optional<StudentAndSubject>studentAndSubject=studentSubjectRepo.findById(dto.getStudentSubjectId());
+        if(studentAndSubject.isEmpty()){
+            throw new UserExceptions("STUDENT SUBJECT ID IS INVALID "+dto.getStudentSubjectId());
+        }
+        TeacherAndTopics teacherAndTopics=new TeacherAndTopics();
+        if(dto.getTopicStatus().equalsIgnoreCase("APPROVED")) {
+            teacherAndTopics.setTopicStatus(TOPIC_STATUS.APPROVED);
+        }else if (dto.getTopicStatus().equalsIgnoreCase("REJECTED")){
+            teacherAndTopics.setTopicStatus(TOPIC_STATUS.REJECTED);
+        };
+        teacherAndTopics.setTopicId(dto.getTopicId());
+        teacherAndTopics.setTopic(dto.getTopic());
+        teacherAndTopics.setTeacherId(dto.getTeacherId());
+        teacherAndTopics.setStudentSubjectId(dto.getStudentSubjectId());
+        teacherAndTopicsRepository.save(teacherAndTopics);
+        StudentTopic studentTopic2=studentTopic.get();
+        studentTopic2.setTeacherAprovels(teacherAndTopics.getTopicStatus());
+        studentTopicRepo.save(studentTopic2);
+        return TeacherAndTopicMapper.fromTeacherTopicEntity(teacherAndTopics);
+    }
+
+    @Override
+    public long getListOfTopicsApprovedByTeacher(String approved) {
+        List<TeacherAndTopics>topics=teacherAndTopicsRepository.findByTopicStatus(TOPIC_STATUS.valueOf(approved));
+        if(topics.isEmpty()){
+            throw new UserExceptions("NO SUCH TOPIC AVAILABLE "+approved);
+        }
+        long topicLength=topics.size();
+        return topicLength;
     }
 
     private TeacherForStudentsResponseDto forStudents(Teachers teachers){

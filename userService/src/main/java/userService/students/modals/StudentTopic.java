@@ -1,12 +1,12 @@
 package userService.students.modals;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import userService.registrations.entities.BaseModels;
+import userService.students.modals.enums.TOPIC_STATUS;
+
+
 @Getter
 @Setter
 @Entity
@@ -16,4 +16,6 @@ public class StudentTopic extends BaseModels {
     @JoinColumn(name = "studentand_subject_id", nullable = false)
     private StudentAndSubject studentAndSubject;
     private String topic;
+    @Enumerated(EnumType.STRING)
+    private TOPIC_STATUS teacherAprovels;
 }

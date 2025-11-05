@@ -53,6 +53,14 @@ public class TeacherController {
     public ResponseEntity<Long>getTeacherByID(@PathVariable ("userEmail")String userEmail ){
         return ResponseEntity.ok(teacherService.getTeacherByUserEmail(userEmail));
     }
+    @PostMapping("/setTeacherTopicStataus")
+    public ResponseEntity<TeacherTopicResponseDto> saveTopicStatusToTeacher(@RequestBody TeacherTopicRequestDto dto){
+        return ResponseEntity.ok(teacherService.saveTopicwhichIsApproved(dto));
+    }
+    @GetMapping("/getApproveal/{status}")
+    public ResponseEntity<Long> listOfTopicStatusTo(@PathVariable ("status")String status){
+        return ResponseEntity.ok(teacherService.getListOfTopicsApprovedByTeacher(status));
+    }
 
 
 }

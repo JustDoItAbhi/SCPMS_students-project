@@ -13,4 +13,14 @@ public interface TeacherService {
     List<ListOfTechersResponseDto> getListOfTeacher();
     TeacherResponseDto getTeacherById(long id);
     long getTeacherByUserEmail(String userEmail);
+    TeacherTopicResponseDto saveTopicwhichIsApproved(TeacherTopicRequestDto dto);
+    long getListOfTopicsApprovedByTeacher(String approved);
+
 }
+// student SENT REQUEST WITH STATUS WAITING IF TEACHER APROVE THE REQUEST
+// THEN IT SHOULD SAVE STUDENT TOPIC AS APROVED AND TEACHER SHOULD BE ABLE TO CHECK ALL APPROVED TOICS
+//TEACHER WILL RETURN ONLY APPROVED OR REJECTED  WITH TOPIC ID AND STUDENTSUBJECT ID, OR WITH STUDENT EMAIL
+
+//1st find topic by topic id
+
+

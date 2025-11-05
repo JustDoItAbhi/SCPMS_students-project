@@ -97,12 +97,12 @@ const StudentThesisRequests = () => {
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      PENDING: { class: 'status-pending', text: 'Pending Review' },
+     WAITING: { class: 'status-pending', text: 'Pending Review' },
       APPROVED: { class: 'status-approved', text: 'Approved' },
       REJECTED: { class: 'status-rejected', text: 'Rejected' }
     };
     
-    const config = statusConfig[status] || statusConfig.PENDING;
+    const config = statusConfig[status] || statusConfig.WAITING;
     return <span className={`status-badge ${config.class}`}>{config.text}</span>;
   };
 
@@ -197,7 +197,7 @@ const StudentThesisRequests = () => {
                   ) : (
                     <>
                       <span className="icon">✓</span>
-                      Approve Thesis
+                      APPROVE
                     </>
                   )}
                 </button>
