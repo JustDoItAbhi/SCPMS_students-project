@@ -1,4 +1,4 @@
-package userService.teachermappers;
+package userService.teachers.teachermappers;
 
 import userService.teachers.modal.Teachers;
 import userService.teachers.teachersDtos.ListOfTechersResponseDto;

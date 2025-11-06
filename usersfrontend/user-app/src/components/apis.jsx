@@ -234,7 +234,8 @@ const formatYear = (year) => {
     try{
         const response=await axiosInstance.get(`/api/students/getStudentSubjectDetails/${userId}`);
         console.log("SUBJECTS BY ID ",response.data)
-        console.log("SUBJECTS BY ID STORE ",response.data.studentAndSubjectId)
+        console.log("SUBJECTS BY ID STORE ",response.data.subject.subject)
+        localStorage.setItem("subject",response.data.subject.subject)
         localStorage.setItem("studentAndSubjectId",response.data.studentAndSubjectId)
         return response.data
     }catch(err){
@@ -276,6 +277,18 @@ export const registerSubjects = async (id, year, subjects) => {
      
         const response = await axiosInstance.post(`/api/students/writeTopic`, values);
         console.log("Topic submitted successfully:", response.data);
+        return response.data;
+    } catch (err) {
+        console.error("Error submitting topic:", err.response?.data || err.message);
+        throw err;
+    }
+}
+
+ export const SetApprovalToTopicByTeacher=async(values)=>{
+      try {
+     
+        const response = await axiosInstance.post(`/api/teachers/setTeacherTopicStataus`, values);
+        console.log("Topic selection successfully:", response.data);
         return response.data;
     } catch (err) {
         console.error("Error submitting topic:", err.response?.data || err.message);

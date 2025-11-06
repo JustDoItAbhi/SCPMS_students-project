@@ -20,21 +20,7 @@ function TeachersSignup() {
   const navigate=  useNavigate();
 
     const years = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
-    const fetchTeacherData = async () => {
-        try {
-            if (userId) {
-                console.log("✅ Ready to complete teacher signup for user:", userId);
-               const teachers=await GetTeacherByidss(teacherId);
-               if(!teacher){
-        navigate("/TEACHER-PROFILE");
-            }
-               console.log("TEACHER DATA BY ID ",teachers);
 
-            }
-        } catch (err) {
-            console.log("❌ Error fetching teacher data:", err.message);
-        }
-    };
 
 const fetchSubjectsByYear = async (year) => {
  
@@ -138,7 +124,21 @@ localStorage.setItem('teacherSubject', subject);
             messageApi.error("Please complete user registration first");
         }
     }, [userId]);
+    const fetchTeacherData = async () => {
+        try {
+            if (userId) {
+                console.log("✅ Ready to complete teacher signup for user:", userId);
+               const teachers=await GetTeacherByidss(teacherId);
+               if(!teacher){
+        navigate("/TEACHER-PROFILE");
+            }
+               console.log("TEACHER DATA BY ID ",teachers);
 
+            }
+        } catch (err) {
+            console.log("❌ Error fetching teacher data:", err.message);
+        }
+    };
     return (
         <div className="teachers-signup-container">
             {contextHolder}

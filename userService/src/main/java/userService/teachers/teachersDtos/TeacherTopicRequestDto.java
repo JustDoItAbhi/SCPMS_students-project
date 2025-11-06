@@ -8,7 +8,7 @@ import userService.students.modals.enums.TOPIC_STATUS;
 @Getter
 @Setter
 public class TeacherTopicRequestDto {
-    private long teacherTopicId;
+//    private long teacherTopicId;
     private String topicStatus;
     private long topicId;
     private long studentSubjectId;

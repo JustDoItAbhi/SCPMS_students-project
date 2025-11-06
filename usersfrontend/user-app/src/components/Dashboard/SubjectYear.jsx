@@ -3,12 +3,13 @@ import { Card, List, Checkbox, Button, Typography, Alert, Spin } from 'antd';
 import { BookOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import './SubjectYear.css';
-import { GetSubjectByYear, registerSubjects } from '../apis';
+import { GetSubjectAndStudentAllDetailsById, GetSubjectByYear, registerSubjects } from '../apis';
 import "./SubjectYear.css"
 import { Link, useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 const SubjectYear = () => {
+
 const navigate= useNavigate();
 
     const [selectedYear, setSelectedYear] = useState('');
@@ -17,12 +18,28 @@ const navigate= useNavigate();
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ type: '', content: '' });
     const [chhoseSeubject, setChoosenSubject] = useState('');
+    
+    const userDetails = localStorage.getItem("userId");
+    // console.log("STUDENT DETAILS TO GET ID ",userDetails.subject.students.user)
        const studentSubjectId = localStorage.getItem('studentAndSubjectId') 
           if(studentSubjectId){
             navigate("/TOPIC-SELECTION")
             }
 
     const years = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
+
+        const getStudentIfExists=async()=>{
+        try{
+            const student=await GetSubjectAndStudentAllDetailsById(userDetails);
+            if(student){
+                console.log("STUDENT DETAILS TO GET ID ",student);
+                  navigate("/TOPIC-SELECTION")
+            }
+        }catch(err){
+            console.log(err.message);
+        }
+    }
+    getStudentIfExists();
 
     // Fetch subjects when year is selected
     const fetchSubjectsByYear = async (year) => {
@@ -62,6 +79,7 @@ const navigate= useNavigate();
         if (checked) {
             setSelectedSubjects(prev => [...prev, subject]);
             console.log(subject);
+            console.log("SUBJECTSSS",subject)
             localStorage.setItem("subject",subject);
         } else {
             setSelectedSubjects(prev => prev.filter(sub => sub !== subject));

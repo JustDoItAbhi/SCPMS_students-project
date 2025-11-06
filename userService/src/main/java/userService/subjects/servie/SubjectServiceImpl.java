@@ -49,6 +49,18 @@ public class SubjectServiceImpl implements SubjectService{
         return dto;
     }
 
+    @Override
+    public SubjectResponseDto updateSubject(long id,SubjectRequestDto dto) {
+        Optional<Subjects>subjects=subjectRepository.findById(id);
+        if(subjects.isEmpty()){
+            throw new UserExceptions("INVALID SUBJECT "+ id);
+        }
+        Subjects subject=subjects.get();
+        subject.setSubject(dto.getSubjct());
+        subject.setCourseYear(dto.getCourseYear());
+        subjectRepository.save(subject);
+        return fromEntity(subject);
+    }
 
 
     private SubjectResponseDto fromEntity(Subjects subjects){

@@ -21,6 +21,16 @@ function StudentTopic() {
     const studentId = localStorage.getItem("studentId");
     const userId=localStorage.getItem("userId");
 
+    const getStudentsSubject=async()=>{
+        try{
+            // const studentSubject=await 
+        }catch(err){
+            console.log(err.message);
+        }
+    }
+
+
+
     const getData = async () => {
         setLoading(true);
         setError("");
@@ -28,7 +38,7 @@ function StudentTopic() {
 
             
             const getStudentAndSubjectbyId=await GetSubjectAndStudentAllDetailsById(userId);
-            console.log("USER AND STUDENT AND SUBJECT "+getStudentAndSubjectbyId);
+            console.log("USER AND STUDENT AND SUBJECT "+getStudentAndSubjectbyId.id);
 
 
             const response = await GetAllTeachersBySubjectName(subject);

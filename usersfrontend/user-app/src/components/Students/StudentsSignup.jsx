@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getStudentByID, GetStudentDetailById} from "../apis";
+import { getStudentByID, GetStudentDetailById, GetSubjectAndStudentAllDetailsById} from "../apis";
 import { Button, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -9,6 +9,7 @@ function StudentsSignup() {
     const navigate = useNavigate();
 
     const userDetails = localStorage.getItem("userId");
+
 
 
 

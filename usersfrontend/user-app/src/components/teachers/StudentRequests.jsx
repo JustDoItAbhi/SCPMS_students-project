@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './StudentRequests.css';
-import { GetAllTheStdListForTeacher } from '../apis';
+import { GetAllTheStdListForTeacher, SetApprovalToTopicByTeacher } from '../apis';
 
 const StudentThesisRequests = () => {
   const [thesisRequests, setThesisRequests] = useState([]);
@@ -12,12 +12,20 @@ const StudentThesisRequests = () => {
   useEffect(() => {
     fetchThesisRequests();
   }, []);
+  
 
   const fetchThesisRequests = async () => {
+ 
     try {
       setLoading(true);
       const response = await GetAllTheStdListForTeacher(teacherId);
-      console.log('THESIS REQUESTS:', response);
+      console.log('THESIS REQUESTS:',response?.map(student=>student.topicId).filter(Boolean) )
+      const validTopcId=response?.map(student=>student.topicId).filter(Boolean);
+       const firstTopicId = response?.[0]?.topicId;
+  console.log('FIRST TOPIC ID:', firstTopicId);
+
+      // localStorage.setItem("topicId",validTopcId);
+
       setThesisRequests(response);
     } catch (err) {
       setError('Failed to fetch thesis requests');
@@ -27,17 +35,39 @@ const StudentThesisRequests = () => {
     }
   };
 
-  const handleApprove = async (topicId, student) => {
+  // private long teacherTopicId;
+  //   private String topicStatus;
+  //   private long topicId;
+  //   private long studentSubjectId;
+  //   private long teacherId;
+  //   private String topic;
+
+
+
+
+
+  const handleApprove = async (topicIds, student) => {
+    const studentTopic={
+      topicStatus:"APPROVED",
+      topicId:topicIds,
+      studentSubjectId:student.responseDto.subject.id,
+      teacherId:student.teacherId,
+      topic:student.topic
+}
     try {
-      setActionLoading(topicId);
-      // TODO: Add your approve API call here
-      // await approveStudentRequest(topicId);
-      
-      console.log('Approving topic:', topicId, student);
+      console.log("STUDENT AND TOPIC ",studentTopic)
+      setActionLoading(topicIds);
+      const topic=await SetApprovalToTopicByTeacher(studentTopic)
+      console.log("TOPIC APPROVAL",topic)
+     
+      console.log('Approving topic:', topicIds, student);
+      console.log("STUDENT AND SUBJECT ID",student.responseDto.subject.id)
+            console.log("STUDENT AND teacher ID",student.teacherId)
+         console.log("STUDENT AND teacher ID",student.topic)
       alert(`Thesis topic approved for ${getStudentName(student)}!`);
       
       // Remove from list after approval
-      setThesisRequests(prev => prev.filter(req => req.topicId !== topicId));
+      setThesisRequests(prev => prev.filter(req => req.topicId !== topicIds));
     } catch (err) {
       alert('Failed to approve thesis topic');
       console.error('Error:', err);
@@ -46,22 +76,30 @@ const StudentThesisRequests = () => {
     }
   };
 
-  const handleReject = async (topicId, student) => {
+  const handleReject = async (topicIds, student) => {
+
     const studentName = getStudentName(student);
     if (!window.confirm(`Reject thesis topic for ${studentName}?`)) {
       return;
     }
-
+        const studentTopic={
+      topicStatus:"REJECTED",
+      topicId:topicIds,
+      studentSubjectId:student.responseDto.subject.id,
+      teacherId:student.teacherId,
+      topic:student.topic
+}
     try {
-      setActionLoading(topicId);
-      // TODO: Add your reject API call here
-      // await rejectStudentRequest(topicId);
+      setActionLoading(topicIds);
+      const topic=await SetApprovalToTopicByTeacher(studentTopic)
+      console.log("TOPIC ",topic)
+
       
       console.log('Rejecting topic:', topicId, student);
       alert(`Thesis topic rejected for ${studentName}`);
       
       // Remove from list after rejection
-      setThesisRequests(prev => prev.filter(req => req.topicId !== topicId));
+      setThesisRequests(prev => prev.filter(req => req.topicId !== topicIds));
     } catch (err) {
       alert('Failed to reject thesis topic');
       console.error('Error:', err);

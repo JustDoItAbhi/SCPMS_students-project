@@ -10,4 +10,5 @@ public interface SubjectService {
     SubjectResponseDto addSubjectByYear(SubjectRequestDto dto);
 
     SubjectResponseDto getSubhectByYear(String Year);
+    SubjectResponseDto updateSubject(long id,SubjectRequestDto dto);
 }

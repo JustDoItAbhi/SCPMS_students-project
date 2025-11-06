@@ -14,6 +14,10 @@ const TeacherProfile = () => {
 
 
     const teacherId= localStorage.getItem("teacherId")
+
+      //  const id=JSON.parse(localStorage.getItem("teacher"));
+      // console.log("TEACHER DETAILS FOR ID ", id);
+
   useEffect(() => {
     fetchTeacherProfile();
   }, [teacherId]);
@@ -21,9 +25,14 @@ const TeacherProfile = () => {
   const fetchTeacherProfile = async () => {
     try {
       setLoading(true);
-      const response = await GetTeacherByidss(teacherId);
-      console.log('TEACHER DATA BY ID', response);
+      // const response = await GetTeacherByidss(id.teacherId);
+      // console.log('TEACHER DATA BY ID', response);
+      // setTeacher(response);
+      //       if(!response){
+          const response = await GetTeacherByidss(teacherId);
+               console.log('TEACHER DATA BY ID 2nD API', response);
       setTeacher(response);
+      // }
     } catch (err) {
       setError('Failed to fetch teacher profile');
       console.error('Error fetching teacher:', err);
@@ -45,6 +54,7 @@ const TeacherProfile = () => {
     try{
       const getList=await GetAllTheStdListForTeacher(teacherId);
       console.log("STUDENTS LIST ", getList);
+            console.log("STUDENTS LIST ", getList);
       if(getList){
       navigate("/TEACHER-APROVEL")
 

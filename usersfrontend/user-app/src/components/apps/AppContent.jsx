@@ -33,6 +33,7 @@ function AppContent() {
 
   return (
     <>
+    {/* <HomePage /> */}
       {showNavBar && (
         <div style={{ position: "relative", zIndex: 2 }}>
           <NavBar />
@@ -54,9 +55,11 @@ function AppContent() {
         <Route path="/STUDENTSIGNUP" element={<StudentsSignup />} />
         <Route path="/TEACHERSIGNUP" element={<TeachersSignup />} />
         <Route path="/DELETESTUDENT" element={<DeleteStudent />} />
+        
         <Route path="/Student-dashboard" element={<SubjectYear />} />
         <Route path='/REGISTER-SUBJECT' element={<RegisterToSubject/>}/>
         <Route path='/USER-PROFILE' element={<Profile/>}/>
+
         <Route path='/TOPIC-SELECTION' element={<StudentTopic/>}/>
         <Route path="/TEACHER-PROFILE" element={<TeacherProfile />} />
         <Route path="/TEACHER-APROVEL" element={<StudentRequests />} />

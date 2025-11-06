@@ -22,4 +22,8 @@ public class SubjectController {
     public ResponseEntity<SubjectResponseDto>findBYyEAR(@PathVariable ("year")String year){
         return ResponseEntity.ok(subjectService.getSubhectByYear(year));
     }
+    @PutMapping("/updateSubject/{subjectId}")
+    public ResponseEntity<SubjectResponseDto>findBYyEAR(@PathVariable ("subjectId")long subjectId,@RequestBody SubjectRequestDto dto){
+        return ResponseEntity.ok(subjectService.updateSubject(subjectId,dto));
+    }
 }
