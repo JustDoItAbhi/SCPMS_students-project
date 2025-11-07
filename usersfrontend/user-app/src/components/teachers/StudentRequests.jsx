@@ -19,6 +19,7 @@ const StudentThesisRequests = () => {
     try {
       setLoading(true);
       const response = await GetAllTheStdListForTeacher(teacherId);
+            console.log('THESIS REQUESTS:',response )
       console.log('THESIS REQUESTS:',response?.map(student=>student.topicId).filter(Boolean) )
       const validTopcId=response?.map(student=>student.topicId).filter(Boolean);
        const firstTopicId = response?.[0]?.topicId;
@@ -95,7 +96,7 @@ const StudentThesisRequests = () => {
       console.log("TOPIC ",topic)
 
       
-      console.log('Rejecting topic:', topicId, student);
+      console.log('Rejecting topic:', topicIds, student);
       alert(`Thesis topic rejected for ${studentName}`);
       
       // Remove from list after rejection

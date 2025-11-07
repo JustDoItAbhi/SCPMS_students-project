@@ -24,6 +24,8 @@ import Profile from '../home/Profile';
 import StudentTopic from '../Dashboard/StudentTopic';
 import TeacherProfile from '../teachers/TeacherProfile';
 import StudentRequests from '../teachers/StudentRequests';
+import DeleteAllTopics from '../teachers/DeleteAllTopics';
+import TopicPage from '../TOPICS/TopicPage';
 
 
 function AppContent() {
@@ -63,6 +65,8 @@ function AppContent() {
         <Route path='/TOPIC-SELECTION' element={<StudentTopic/>}/>
         <Route path="/TEACHER-PROFILE" element={<TeacherProfile />} />
         <Route path="/TEACHER-APROVEL" element={<StudentRequests />} />
+        <Route path="/TEACHER-DELETE-ALL-TOPICS" element={<DeleteAllTopics />} />
+        <Route path="/ALL-TOPICS" element={<TopicPage />} />
         
 
         <Route

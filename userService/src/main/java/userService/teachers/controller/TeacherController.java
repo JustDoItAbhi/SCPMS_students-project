@@ -61,6 +61,24 @@ public class TeacherController {
     public ResponseEntity<Long> listOfTopicStatusTo(@PathVariable ("status")String status){
         return ResponseEntity.ok(teacherService.getListOfTopicsApprovedByTeacher(status));
     }
+    @DeleteMapping("/deleteTopicByTeachrId/{teacherId}")
+    public ResponseEntity<String> deteleTopicByTeacher(@PathVariable ("teacherId")long teacherId){
+        return ResponseEntity.ok(teacherService.deleteTopicByTeacher(teacherId));
+    }
+    @GetMapping("/getAllTopicByTeacherTopicId/{teacherId}")
+    public ResponseEntity<List<TeacherTopicResponseDto>>getAllTopicByTeacherTopicID(@PathVariable ("teacherId")long teacherId ){
+        return ResponseEntity.ok(teacherService.getAllTopicByTeacherId(teacherId));
+    }
+
+
+
+
+    // IT WILL DELETE ALL TOPICS SO NOT A GOOD ADVISE
+//    @DeleteMapping("/deleteaLLTopics")
+//    public ResponseEntity<String> deteleAllTopic(){
+//        return ResponseEntity.ok(teacherService.deleteAllTeacherTopics());
+//    }
+
 
 
 }

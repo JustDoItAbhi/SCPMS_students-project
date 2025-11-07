@@ -15,17 +15,17 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('access_token');
-    console.log("🚀 REQUEST INTERCEPTOR - Token:", token ? "Present" : "Missing");
-    console.log("🚀 Request URL:", config.url);
+    // console.log("🚀 REQUEST INTERCEPTOR - Token:", token ? "Present" : "Missing");
+    // console.log("🚀 Request URL:", config.url);
 
     if (token) {
       // ✅ Validate token before attaching
       const validation = validateToken(token);
-      console.log("🔍 Token validation result:", validation);
+      // console.log("🔍 Token validation result:", validation);
 
       if (validation.valid) {
         config.headers.Authorization = `Bearer ${token}`;
-        console.log("✅ Authorization header set with valid token");
+        // console.log("✅ Authorization header set with valid token");
       } else {
         console.log("❌ Token invalid:", validation.reason);
       }
@@ -42,7 +42,7 @@ axiosInstance.interceptors.request.use(
 // ✅ Response interceptor - handle common errors
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log("✅ RESPONSE INTERCEPTOR - Success:", response.status, response.config.url);
+    // console.log("✅ RESPONSE INTERCEPTOR - Success:", response.status, response.config.url);
     return response;
   },
   (error) => {

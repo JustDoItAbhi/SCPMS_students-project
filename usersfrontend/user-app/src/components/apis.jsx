@@ -295,3 +295,36 @@ export const registerSubjects = async (id, year, subjects) => {
         throw err;
     }
 }
+ export const GetTeacherApprovel=async(status)=>{
+      try {
+     
+        const response = await axiosInstance.get(`/api/teachers/getApproveal/${status}`);
+        console.log("STUDNETS STATUS FOR TEACHER :", response.data);
+        return response.data;
+    } catch (err) {
+        console.error("Error submitting topic:", err.response?.data || err.message);
+        throw err;
+    }
+}
+ export const DeleteAllTeachersTopicByTeacherId=async(teacherId)=>{
+      try {
+     
+        const response = await axiosInstance.delete(`/api/teachers/deleteTopicByTeachrId/${teacherId}`);
+        console.log("STUDNETS STATUS FOR TEACHER :", response.data);
+        return response.data;
+    } catch (err) {
+        console.error("Error submitting topic:", err.response?.data || err.message);
+        throw err;
+    }
+}
+
+ export const GetALLTopicsByTeacherid=async(teacherId)=>{
+      try {
+        const response = await axiosInstance.get(`/api/teachers/getAllTopicByTeacherTopicId/${teacherId}`);
+        console.log("TEACHER AND TOPIC :", response.data);
+        return response.data;
+    } catch (err) {
+        console.error("Error submitting topic:", err.response?.data || err.message);
+        throw err;
+    }
+}

@@ -23,6 +23,7 @@ import userService.teachers.repos.TeacherRepository;
 import userService.teachers.teachersDtos.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -194,20 +195,30 @@ public class TeachersServiceImpl implements TeacherService{
         if(studentAndSubject.isEmpty()){
             throw new UserExceptions("STUDENT SUBJECT ID IS INVALID "+dto.getStudentSubjectId());
         }
-        TeacherAndTopics teacherAndTopics=new TeacherAndTopics();
-        if(dto.getTopicStatus().equalsIgnoreCase("APPROVED")) {
-            teacherAndTopics.setTopicStatus(TOPIC_STATUS.APPROVED);
-        }else if (dto.getTopicStatus().equalsIgnoreCase("REJECTED")){
-            teacherAndTopics.setTopicStatus(TOPIC_STATUS.REJECTED);
-        };
-        teacherAndTopics.setTopicId(dto.getTopicId());
-        teacherAndTopics.setTopic(dto.getTopic());
-        teacherAndTopics.setTeacherId(dto.getTeacherId());
-        teacherAndTopics.setStudentSubjectId(dto.getStudentSubjectId());
-        teacherAndTopicsRepository.save(teacherAndTopics);
-        StudentTopic studentTopic2=studentTopic.get();
-        studentTopic2.setTeacherAprovels(teacherAndTopics.getTopicStatus());
-        studentTopicRepo.save(studentTopic2);
+
+        Optional<TeacherAndTopics>teacherByTopicId=teacherAndTopicsRepository.findByTopicId(dto.getTopicId());
+        if(teacherByTopicId.isPresent()) {
+            TeacherAndTopics topics = teacherByTopicId.get();
+            if (topics.getTopicStatus().equals(dto.getTopicStatus())) {
+                teacherAndTopicsRepository.save(topics);
+            }
+        }
+                TeacherAndTopics teacherAndTopics=new TeacherAndTopics();
+                if(dto.getTopicStatus().equalsIgnoreCase("APPROVED")) {
+                    teacherAndTopics.setTopicStatus(TOPIC_STATUS.APPROVED);
+                }else if (dto.getTopicStatus().equalsIgnoreCase("REJECTED")){
+                    teacherAndTopics.setTopicStatus(TOPIC_STATUS.REJECTED);
+                };
+                teacherAndTopics.setTopicId(dto.getTopicId());
+                teacherAndTopics.setTopic(dto.getTopic());
+                teacherAndTopics.setTeacherId(dto.getTeacherId());
+                teacherAndTopics.setStudentSubjectId(dto.getStudentSubjectId());
+                teacherAndTopicsRepository.save(teacherAndTopics);
+                StudentTopic studentTopic2=studentTopic.get();
+                studentTopic2.setTeacherAprovels(teacherAndTopics.getTopicStatus());
+                studentTopicRepo.save(studentTopic2);
+
+
         return TeacherAndTopicMapper.fromTeacherTopicEntity(teacherAndTopics);
     }
 
@@ -219,6 +230,42 @@ public class TeachersServiceImpl implements TeacherService{
         }
         long topicLength=topics.size();
         return topicLength;
+    }
+
+    @Override
+    public String deleteTopicByTeacher(long teacherId) {
+        List<TeacherAndTopics>topics=teacherAndTopicsRepository.findByTeacherId(teacherId);
+        if(topics.isEmpty()){
+            throw new UserExceptions("NO SUCH TOPIC EXISTS "+ teacherId);
+        }else{
+//            List<Long>idsDelete= Arrays.asList(teacherId);
+            teacherAndTopicsRepository.deleteAllById(Arrays.asList(teacherId));
+            return "TOPIC DELETED";
+        }
+    }
+
+    @Override
+    public TeacherTopicResponseDto getTeacherTopicByTopicId(long teacherTopicid) {
+        Optional<TeacherAndTopics>topics=teacherAndTopicsRepository.findById(teacherTopicid);
+        if(topics.isEmpty()){
+            throw new UserExceptions("NO SUCH TOPIC EXSITS");
+        }
+
+        return TeacherAndTopicMapper.fromTeacherTopicEntity(topics.get());
+    }
+
+    @Override
+    public List<TeacherTopicResponseDto> getAllTopicByTeacherId(long teacherId) {
+        List<TeacherAndTopics>topics=teacherAndTopicsRepository.findByTeacherId(teacherId);
+        if(topics.isEmpty()){
+            throw new UserExceptions("NO SUCH TOPIC EXSITS "+teacherId);
+        }
+        List<TeacherTopicResponseDto>responseDtos=new ArrayList<>();
+        for(TeacherAndTopics teacherAndTopics:topics){
+            responseDtos.add(TeacherAndTopicMapper.fromTeacherTopicEntity(teacherAndTopics));
+        }
+
+        return responseDtos;
     }
 
     private TeacherForStudentsResponseDto forStudents(Teachers teachers){

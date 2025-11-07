@@ -15,6 +15,9 @@ public interface TeacherService {
     long getTeacherByUserEmail(String userEmail);
     TeacherTopicResponseDto saveTopicwhichIsApproved(TeacherTopicRequestDto dto);
     long getListOfTopicsApprovedByTeacher(String approved);
+    String deleteTopicByTeacher(long teacherTopicId);
+    TeacherTopicResponseDto getTeacherTopicByTopicId(long teacherTopicid);
+    List<TeacherTopicResponseDto> getAllTopicByTeacherId(long teacherId);
 
 }
 // student SENT REQUEST WITH STATUS WAITING IF TEACHER APROVE THE REQUEST

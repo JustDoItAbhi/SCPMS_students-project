@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import './TeacherProfile.css';
-import { GetAllTheStdListForTeacher, GetTeacherByidss } from '../apis';
+import { GetAllTheStdListForTeacher, GetTeacherApprovel, GetTeacherByidss } from '../apis';
 import { message } from 'antd';
 
 const TeacherProfile = () => {
@@ -10,6 +10,7 @@ const TeacherProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const[students,setStudents]=useState([])||[];
+  const[getStatus,setStatus]=useState(null);
   const navigate=  useNavigate();
 
 
@@ -62,6 +63,21 @@ const TeacherProfile = () => {
     }catch(err){
       console.log(err.message);
     }
+  }
+
+  const getApprovels=async()=>{
+    try{
+      const status=await GetTeacherApprovel("APPROVED");
+      console.log("STATUS",status);
+      setStatus(status);
+    }catch(err){
+      console.log(err.message);
+    }
+  }
+  getApprovels();
+
+  const movetoDeletePage=()=>{
+    navigate("/TEACHER-DELETE-ALL-TOPICS");
   }
 
   if (error) {
@@ -160,7 +176,7 @@ const TeacherProfile = () => {
           <h3>Teaching Statistics</h3>
           <div className="stats-grid">
             <div className="stat-item">
-              <div className="stat-number">0</div>
+              <div className="stat-number">{getStatus}</div>
               <div className="stat-label">Students Assigned</div>
             </div>
             <div className="stat-item">
@@ -178,8 +194,10 @@ const TeacherProfile = () => {
         <div className="info-card">
           <h3>Quick Actions</h3>
           <div className="actions-grid">
-            <button className="action-btn">
-              <span className="icon">📚</span>
+            <button className="action-btn" 
+            onClick={movetoDeletePage}>
+              <span className="icon">📚
+              </span>
               <span>Manage Subjects</span>
             </button>
             <button className="action-btn" 
