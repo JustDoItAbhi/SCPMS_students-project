@@ -89,6 +89,7 @@ const navigate= useNavigate();
     // Handle subject registration
     const handleRegisterSubjects = async (value) => {
         if (selectedSubjects.length === 0) {
+                navigate("/TOPIC-SELECTION")
             setMessage({ 
                 type: 'warning', 
                 content: 'Please select at least one subject' 
@@ -96,7 +97,7 @@ const navigate= useNavigate();
             console.log("SUBJECT REGISTERED ",selectedSubjects?.subject)
             setChoosenSubject(selectedSubjects);
 
-            navigate("/TOPIC-SELECTION")
+        
             return;
         }
 
@@ -260,7 +261,7 @@ const userName=typeof user === 'string' ? JSON.parse(user)?.username : user?.use
                                         size="large"
                                     >
                                         Register Selected Subjects ({selectedSubjects.length})
-                                        <Link to="/TOPIC-SELECTION" ></Link>
+
                                     </Button>
                                 </div>
                             </>

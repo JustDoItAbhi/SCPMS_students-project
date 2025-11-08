@@ -26,6 +26,11 @@ import TeacherProfile from '../teachers/TeacherProfile';
 import StudentRequests from '../teachers/StudentRequests';
 import DeleteAllTopics from '../teachers/DeleteAllTopics';
 import TopicPage from '../TOPICS/TopicPage';
+import StudentSignupWithOtp from '../PRE-REQUESTS-SIGNUP/StudentSignupWithOtp';
+import CheckOtp from '../PRE-REQUESTS-SIGNUP/SIGNUP-APIS/CheckOtp';
+import TeacherWaitingPage from '../PRE-REQUESTS-SIGNUP/TeacherWaitingPage';
+import ContactUs from '../home/ContactUs';
+import ApproveTeacher from '../ADMIN/ApproveTeacher';
 
 
 
@@ -49,6 +54,13 @@ function AppContent() {
         <Route path="/login" element={<AuthLogin />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/callback" element={<Callback />} />
+
+        <Route path="/SEND-OPT-FOR-SIGNUP" element={<StudentSignupWithOtp />} /> 
+        <Route path="/CHECK-OTP-FOR-SIGNUP" element={<CheckOtp />} />
+
+        
+
+
         <Route path="/RESETPASSWORD" element={<ResetPassword />} />
         <Route path="/SENDOTP" element={<SendOtpToEmail />} />
         <Route path="/GetById/:id" element={<GetById />} />
@@ -68,6 +80,15 @@ function AppContent() {
         <Route path="/TEACHER-APROVEL" element={<StudentRequests />} />
         <Route path="/TEACHER-DELETE-ALL-TOPICS" element={<DeleteAllTopics />} />
         <Route path="/ALL-TOPICS" element={<TopicPage />} />
+        <Route path="/TEACHER-WAIT" element={<TeacherWaitingPage />} />
+        <Route path="/CONTACT-US" element={<ContactUs />} />
+
+
+                <Route path="/TEACHER-ROLE" element={
+                  <ApproveTeacher />
+                  } />
+
+        
         
 
         <Route

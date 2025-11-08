@@ -86,9 +86,7 @@ const navigate=useNavigate();
                     rules={[{required:true,message:"Please select a role"}]}
                 >
                     <Select placeholder ="Select a role">
-                        <Select.Option value="ADMIN">ADMIN</Select.Option>
                         <Select.Option value="STUDENT">STUDENT</Select.Option>
-                        <Select.Option value="TEACHER">TEACHER</Select.Option>
                         <Select.Option value="APPLICANT_TEACHER">APPLICANT TEACHER</Select.Option>
                 
                     </Select>

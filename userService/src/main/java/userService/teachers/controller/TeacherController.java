@@ -65,7 +65,7 @@ public class TeacherController {
     public ResponseEntity<String> deteleTopicByTeacher(@PathVariable ("topicId")long topicId){
         return ResponseEntity.ok(teacherService.deleteTopicByTeacher(topicId));
     }
-    @GetMapping("/getAllTopicByTeacherTopicId/{teacherId }")
+    @GetMapping("/getAllTopicByTeacherTopicId/{teacherId}")
     public ResponseEntity<List<TeacherTopicResponseDto>>getAllTopicByTeacherTopicID(@PathVariable ("teacherId")long teacherId ){
         return ResponseEntity.ok(teacherService.getAllTopicByTeacherId(teacherId));
     }

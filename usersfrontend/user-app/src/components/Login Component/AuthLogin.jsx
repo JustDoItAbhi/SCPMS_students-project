@@ -13,12 +13,6 @@ const AuthLogin = () => {
     const [loading, setLoading] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
-    //     localStorage.removeItem("access_token")
-    // localStorage.removeItem("studentId")
-    // localStorage.removeItem("subject")
-    // localStorage.removeItem("user")
-    // localStorage.removeItem("userId")
-    // localStorage.removeItem("studentAndSubjectId")
 
     const handleChange = (e) => {
         setFormData({
@@ -152,7 +146,7 @@ const AuthLogin = () => {
 
                             <div className="login-links">
                                 <a href="/SENDOTP">Forgot Password?</a>
-                                <a href="/create">Create Account</a>
+                                <a href="/SEND-OPT-FOR-SIGNUP">Create Account</a>
                                 {/* <a href="/">Or login with OAuth2</a> */}
                             </div>
                         </div>

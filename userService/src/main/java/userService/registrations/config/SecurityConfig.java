@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -140,8 +141,10 @@ public class SecurityConfig {
                                 "/api/user/me",
                                 "/client/register",
                                 "/api/user/createUser",
-                                "/roles/createRole"
+                                "/roles/createRole",
+                                "/api/user/StudentSignUp"
                         ).permitAll()
+                        .requestMatchers("/api/user/ConfirmStudentSignUp/otp/**").permitAll()
                         .requestMatchers("/api/teachers/finishSignUP/{id}").hasRole("TEACHER")
                         .requestMatchers("/api/students/completeStundentSignUp/{stId}").hasRole("STUDENT")
 

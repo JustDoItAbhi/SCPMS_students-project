@@ -1,6 +1,6 @@
 import axios from "axios"
 import axiosInstance from "../auth/AuthMiddleWear"
-import { useNavigate } from "react-router-dom"
+import { data, useNavigate } from "react-router-dom"
 const BASE_URL="http://localhost:8080/api/user"
 
 export const GetAllUsers = async () => {
@@ -326,5 +326,22 @@ export const registerSubjects = async (id, year, subjects) => {
     } catch (err) {
         console.error("Error submitting topic:", err.response?.data || err.message);
         throw err;
+    }
+}
+ export const ApproveTeacherProfile=async(value)=>{
+      try {
+        const response = await axiosInstance.get(`/api/user/confirmTeacherRole`,value);
+        console.log("TEACHER APPROVAL :", response.data);
+          return send({
+            success:false,
+            message:"error",
+            data:response.data
+        })
+    } catch (err) {
+        console.error("Error submitting tEACHERrOLE:", err.response?.data || err.message);
+       return send({
+            success:false,
+            message:"error"
+        })
     }
 }

@@ -1,5 +1,5 @@
 import "./HomeCss.css"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 function HomePage() {
     const navigate = useNavigate();
     localStorage.removeItem("access_token")
@@ -77,7 +77,7 @@ function HomePage() {
             </div>
             <footer className="contacts">
                 <div>
-                    <h2>Contact Us</h2>
+                     <Link to="/CONTACT-US" style={{width:"100vw",color:"white"}}>CONTACT US</Link>
                     <p>
                         <strong>Address:</strong> 12 Universtistsks Street, City Uzhhorod, Country Uzhhorod
                     </p>
