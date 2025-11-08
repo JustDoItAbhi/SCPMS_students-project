@@ -15,7 +15,7 @@ public interface TeacherService {
     long getTeacherByUserEmail(String userEmail);
     TeacherTopicResponseDto saveTopicwhichIsApproved(TeacherTopicRequestDto dto);
     long getListOfTopicsApprovedByTeacher(String approved);
-    String deleteTopicByTeacher(long teacherTopicId);
+    String deleteTopicByTeacher(long topicId);
     TeacherTopicResponseDto getTeacherTopicByTopicId(long teacherTopicid);
     List<TeacherTopicResponseDto> getAllTopicByTeacherId(long teacherId);
 

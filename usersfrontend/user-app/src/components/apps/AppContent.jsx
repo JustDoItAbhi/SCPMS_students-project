@@ -28,6 +28,7 @@ import DeleteAllTopics from '../teachers/DeleteAllTopics';
 import TopicPage from '../TOPICS/TopicPage';
 
 
+
 function AppContent() {
   const location = useLocation();
   const showNavBar = ['/USER',  '/GetList', '/dashboard', '/unauthorized'].includes(location.pathname)

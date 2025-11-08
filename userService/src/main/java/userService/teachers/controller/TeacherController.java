@@ -61,11 +61,11 @@ public class TeacherController {
     public ResponseEntity<Long> listOfTopicStatusTo(@PathVariable ("status")String status){
         return ResponseEntity.ok(teacherService.getListOfTopicsApprovedByTeacher(status));
     }
-    @DeleteMapping("/deleteTopicByTeachrId/{teacherId}")
-    public ResponseEntity<String> deteleTopicByTeacher(@PathVariable ("teacherId")long teacherId){
-        return ResponseEntity.ok(teacherService.deleteTopicByTeacher(teacherId));
+    @DeleteMapping("/deleteTopicByTeacherId/{topicId}")
+    public ResponseEntity<String> deteleTopicByTeacher(@PathVariable ("topicId")long topicId){
+        return ResponseEntity.ok(teacherService.deleteTopicByTeacher(topicId));
     }
-    @GetMapping("/getAllTopicByTeacherTopicId/{teacherId}")
+    @GetMapping("/getAllTopicByTeacherTopicId/{teacherId }")
     public ResponseEntity<List<TeacherTopicResponseDto>>getAllTopicByTeacherTopicID(@PathVariable ("teacherId")long teacherId ){
         return ResponseEntity.ok(teacherService.getAllTopicByTeacherId(teacherId));
     }

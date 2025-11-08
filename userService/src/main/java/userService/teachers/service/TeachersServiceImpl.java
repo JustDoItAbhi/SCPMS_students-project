@@ -233,15 +233,17 @@ public class TeachersServiceImpl implements TeacherService{
     }
 
     @Override
-    public String deleteTopicByTeacher(long teacherId) {
-        List<TeacherAndTopics>topics=teacherAndTopicsRepository.findByTeacherId(teacherId);
+    public String deleteTopicByTeacher(long topicId) {
+        Optional<TeacherAndTopics>topics=teacherAndTopicsRepository.findById(topicId);
         if(topics.isEmpty()){
-            throw new UserExceptions("NO SUCH TOPIC EXISTS "+ teacherId);
-        }else{
-//            List<Long>idsDelete= Arrays.asList(teacherId);
-            teacherAndTopicsRepository.deleteAllById(Arrays.asList(teacherId));
-            return "TOPIC DELETED";
+            throw new UserExceptions("NO SUCH TOPIC EXISTS "+ topicId);
         }
+        teacherAndTopicsRepository.deleteById(topicId);
+
+//            List<Long>idsDelete= Arrays.asList(teacherId);
+//            teacherAndTopicsRepository.deleteAllById(Arrays.asList(teacherId));
+            return "TOPIC DELETED";
+
     }
 
     @Override

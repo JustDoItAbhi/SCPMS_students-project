@@ -7,6 +7,7 @@ const StudentThesisRequests = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionLoading, setActionLoading] = useState(null);
+  const[getUser,setUser]=useState([]);
   const teacherId = localStorage.getItem("teacherId");
 
   useEffect(() => {
@@ -22,8 +23,9 @@ const StudentThesisRequests = () => {
             console.log('THESIS REQUESTS:',response )
       console.log('THESIS REQUESTS:',response?.map(student=>student.topicId).filter(Boolean) )
       const validTopcId=response?.map(student=>student.topicId).filter(Boolean);
-       const firstTopicId = response?.[0]?.topicId;
+       const firstTopicId = response?.map(student=>student.responseDto.subject.students);
   console.log('FIRST TOPIC ID:', firstTopicId);
+  setUser(firstTopicId);
 
       // localStorage.setItem("topicId",validTopcId);
 
@@ -35,19 +37,8 @@ const StudentThesisRequests = () => {
       setLoading(false);
     }
   };
-
-  // private long teacherTopicId;
-  //   private String topicStatus;
-  //   private long topicId;
-  //   private long studentSubjectId;
-  //   private long teacherId;
-  //   private String topic;
-
-
-
-
-
   const handleApprove = async (topicIds, student) => {
+    
     const studentTopic={
       topicStatus:"APPROVED",
       topicId:topicIds,
@@ -114,8 +105,8 @@ const StudentThesisRequests = () => {
     if (!request?.responseDto) return 'Student';
     
     if (typeof request.responseDto === 'string') return 'Student';
-    if (request.responseDto.studentName) return request.responseDto.studentName;
-    if (request.responseDto.students?.user?.name) return request.responseDto.students.user.name;
+    if (request.responseDto.studentName) return request.responseDto.subject.students.user.name;
+    if (request.responseDto.subject?.students?.user?.name) return request.responseDto.subject.students.user.name;
     
     return 'Student';
   };
@@ -124,7 +115,7 @@ const StudentThesisRequests = () => {
     if (!request?.responseDto) return 'N/A';
     if (typeof request.responseDto === 'string') return 'N/A';
     
-    return request.responseDto.studentId || request.responseDto.id || 'N/A';
+    return request.responseDto.subject.students.user.id || request.responseDto.id || 'N/A';
   };
 
   const getStudentSubject = (request) => {
