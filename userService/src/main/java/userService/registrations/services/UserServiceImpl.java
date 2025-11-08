@@ -63,6 +63,10 @@ public class UserServiceImpl implements UserService{
                 return "STUDENTS";
             }
         }else if (roles.get().getRoleName().equals("APPLICANT_TEACHER")){
+            Optional<TeachrUser>teachrUser=teacherUserRepository.findByTeacherEmail(email);
+            if(teachrUser.isPresent()){
+                return "CREATE PROFILE";
+            }
             emailService.sendSimpleEmail("arvinderpalsingh2321@gmail.com","REQUEST FOR SIGN UP FROM TEACHER ",
                     "ALLOW TEACHER TO SIGN UP "+email+" THANK YOUR");
             System.out.println("EMAIL SENT FOR SIGNUP TEACHER");
@@ -133,14 +137,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public TeacherUserResponseDto approveTeacherSignUp(TeacherUserRequestDto dto) {
-        Optional<Users>exsitingUser=userRepository.findByEmail(dto.getRole());
+        Optional<Users>exsitingUser=userRepository.findByEmail(dto.getTeacherEmail());
         if(exsitingUser.isPresent()){
             emailService.sendSimpleEmail(dto.getTeacherEmail(),"you already regitered teacher please signup or reset password "+ dto.getRole(), "THANK YOUR FOR REACHING US ");
             System.out.println("EMAIL SENT FOR SIGNUP ");
         }
             Optional<Roles>rolesOptional=rolesRepository.findByRoleName(dto.getRole());
             if(rolesOptional.isEmpty()){
-                throw new UserExceptions("NO SUCH ROLE EXSISTS"+dto.getRole());
+                throw new UserExceptions("NO SUCH ROLE EXSISTS "+dto.getRole());
             }if(!dto.getRole().equals("TEACHER")){
                 throw new UserExceptions("YOU ARE NOT A TEACHER "+dto.getRole());
         }
@@ -177,7 +181,7 @@ public class UserServiceImpl implements UserService{
         for(String roles:dto.getRolesList()){
             Optional<Roles>rolesOptional=rolesRepository.findByRoleName(roles);
             if(rolesOptional.isEmpty()){
-                throw new UserExceptions("NO SUCH ROLE EXSISTS"+roles);
+                throw new UserExceptions("NO SUCH ROLE EXSISTS "+roles);
             }
 
             rolesList.add(rolesOptional.get());
@@ -288,7 +292,7 @@ public class UserServiceImpl implements UserService{
         for(String roles:dto.getRolesList()){
             Optional<Roles>rolesOptional=rolesRepository.findByRoleName(roles);
             if(rolesOptional.isEmpty()){
-                throw new UserExceptions("NO SUCH ROLE EXSISTS"+roles);
+                throw new UserExceptions("NO SUCH ROLE EXSIST "+roles);
             }
             rolesList.add(rolesOptional.get());
         }

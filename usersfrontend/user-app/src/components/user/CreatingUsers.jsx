@@ -87,7 +87,7 @@ const navigate=useNavigate();
                 >
                     <Select placeholder ="Select a role">
                         <Select.Option value="STUDENT">STUDENT</Select.Option>
-                        <Select.Option value="APPLICANT_TEACHER">APPLICANT TEACHER</Select.Option>
+                        <Select.Option value="TEACHER">TEACHER</Select.Option>
                 
                     </Select>
                 </Form.Item>

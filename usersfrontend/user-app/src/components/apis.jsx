@@ -328,20 +328,26 @@ export const registerSubjects = async (id, year, subjects) => {
         throw err;
     }
 }
- export const ApproveTeacherProfile=async(value)=>{
-      try {
-        const response = await axiosInstance.get(`/api/user/confirmTeacherRole`,value);
-        console.log("TEACHER APPROVAL :", response.data);
-          return send({
-            success:false,
-            message:"error",
-            data:response.data
-        })
+ export const ApproveTeacherProfile=async(values)=>{
+ try {
+        console.log("Sending teacher approval request:", values);
+         const requestData = {
+            teacherEmail: values.email,  
+            role: values.roles           
+        };
+        
+       const response = await axiosInstance.post(`/api/user/confirmTeacherRole`, requestData, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        console.log("TEACHER APPROVAL SUCCESS:", response.data);
+        return response.data;
     } catch (err) {
-        console.error("Error submitting tEACHERrOLE:", err.response?.data || err.message);
-       return send({
-            success:false,
-            message:"error"
-        })
+        console.error("Error submitting TEACHER ROLE:", err.response?.data || err.message);
+        
+        // Throw the error so it can be caught in the component
+        throw new Error(err.response?.data?.message || err.message || "Failed to approve teacher role");
     }
 }

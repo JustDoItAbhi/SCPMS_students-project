@@ -1,18 +1,32 @@
+import { Button, Form, Input, Select, message } from "antd";
 import { ApproveTeacherProfile } from "../apis";
+import { useState } from "react";
 
-function ApproveTeacher(){
+function ApproveTeacher() {
+    const [form] = Form.useForm();
+    const [loading, setLoading] = useState(false);
 
-    const getData=async()=>{
-        try{
-            const teacher=await ApproveTeacherProfile(value);
-            console.log("TEACHER DATA ",teacher);
+    const getData = async (values) => {
+        console.log("VALUES ", values);
+        setLoading(true);
 
-
-        }catch(err){
-            console.log(err.message);
+        try {
+            const teacher = await ApproveTeacherProfile(values);
+            console.log("TEACHER DATA ", teacher);
+            
+            message.success("Teacher role approved successfully!");
+            form.resetFields(); // Reset form after success
+            
+            return teacher;
+        } catch (err) {
+            console.error("Error in getData:", err);
+            message.error(err.message || "Failed to approve teacher role");
+        } finally {
+            setLoading(false);
         }
-    }
-    return(
+    };
+
+    return (
         <div>
             <div style={{
                 height: "100vh",
@@ -36,9 +50,8 @@ function ApproveTeacher(){
                         marginBottom: "10px",
                         textShadow: "2px 2px 4px rgba(0,0,0,0.3)"
                     }}>
-                        TEACHER APPROVEL
+                        TEACHER APPROVAL
                     </h1>
-                    
                 </div>
 
                 {/* Form Container */}
@@ -53,6 +66,7 @@ function ApproveTeacher(){
                     width: "100%"
                 }}>
                     <Form
+                        form={form}
                         name="basic"
                         labelCol={{ span: 24 }}
                         wrapperCol={{ span: 24 }}
@@ -140,6 +154,7 @@ function ApproveTeacher(){
                             <Button
                                 type="primary"
                                 htmlType="submit"
+                                loading={loading}
                                 style={{
                                     height: "50px",
                                     width: "100%",
@@ -161,7 +176,7 @@ function ApproveTeacher(){
                                     e.target.style.boxShadow = "0 4px 15px rgba(0, 0, 0, 0.2)";
                                 }}
                             >
-                                submit
+                                {loading ? "Submitting..." : "Submit"}
                             </Button>
                         </Form.Item>
                     </Form>
@@ -173,11 +188,11 @@ function ApproveTeacher(){
                     color: "rgba(245, 222, 179, 0.6)",
                     fontSize: "0.9rem"
                 }}>
-                    We verificatied your role 
+                    We verify your role
                 </div>
             </div>
         </div>
-
-    )
+    );
 }
+
 export default ApproveTeacher;

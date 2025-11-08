@@ -17,6 +17,9 @@ function StudentSignupWithOtp() {
             if (signUpStudent==="STUDENTS") {
                 naviagte("/CHECK-OTP-FOR-SIGNUP");
             }
+            if(signUpStudent==="CREATE PROFILE"){
+                naviagte("/create")
+            }
             if(signUpStudent==="PLEASE WAIT"){
                 naviagte("/TEACHER-WAIT")
             }
